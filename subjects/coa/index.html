@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Optimization -->
+    <title>Computer Organization & Architecture — Study Planner | GATE 2027</title>
+    <meta name="description"
+        content="Data-driven study planner for Computer Organization & Architecture — GATE CSE 2027. Track lectures, DPPs, and daily revision with purple glassmorphic aesthetics.">
+    <meta name="keywords" content="GATE 2027, COA study planner, Computer Organization, Architecture, CPU, Cache, Pipeline, Memory Organization">
+    <meta name="author" content="GATE Aspirant">
+
+    <!-- Shared Stylesheets -->
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="../../assets/css/auth.css">
+
+    <!-- COA-specific Stylesheet -->
+    <link rel="stylesheet" href="css/coa-dashboard.css">
+
+    <!-- CDN Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Shared Config & Core -->
+    <script src="../../assets/js/config/config.js" defer></script>
+    <script src="../../assets/js/core/auth.js" defer></script>
+    <script src="../../assets/js/core/error-handler.js" defer></script>
+    <script src="../../assets/js/core/utils.js" defer></script>
+    <script src="../../assets/js/core/storage.js" defer></script>
+
+    <!-- COA Planner Controller -->
+    <script src="js/coa-planner.js" defer></script>
+
+    <!--
+        Route Patch: GateAuthManager._getRoute() assumes pages are at most
+        1 level deep inside /subjects/. This page is 2 levels deep
+        (subjects/coa/index.html), so we patch the route resolver inline.
+    -->
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.GateAuthManager) {
+                const originalGetRoute = window.GateAuthManager._getRoute.bind(window.GateAuthManager);
+                window.GateAuthManager._getRoute = function (routeName) {
+                    const path = window.location.pathname;
+                    const isDeepSubject = /\/subjects\/[^/]+\//.test(path);
+                    if (isDeepSubject) {
+                        if (routeName === 'DASHBOARD') return '../../index.html';
+                        if (routeName === 'LOGIN') return '../../auth/login.html';
+                        if (routeName === 'SIGNUP') return '../../auth/signup.html';
+                    }
+                    return originalGetRoute(routeName);
+                };
+            }
+        });
+    </script>
+</head>
+
+<body class="app-layout coa-page">
+
+    <!-- Loading Overlay -->
+    <div id="app-loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">Loading COA Planner...</span>
+        </div>
+    </div>
+
+    <!-- Offline Banner -->
+    <div id="offline-banner">⚠ You're offline. Some features may be unavailable.</div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Ambient Background — COA purple/violet variant -->
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    <!-- App Main Layout -->
+    <div class="app-main">
+
+        <!-- Topbar -->
+        <header class="app-topbar">
+            <a href="../../index.html" class="subject-back-nav" aria-label="Back to Dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+            </a>
+
+            <div class="topbar-widgets">
+                <div class="topbar-clock" id="header-clock-widget">
+                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
+                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content-wrapper">
+
+            <!-- Sticky Subject Header -->
+            <section class="coa-sticky-header" id="coa-sticky-header" aria-label="COA Progress">
+                <!-- Populated by coa-planner.js -->
+            </section>
+
+            <!-- Navigation Cards -->
+            <section id="coa-nav-section" aria-label="Subject Navigation">
+                <!-- Populated by coa-planner.js -->
+            </section>
+
+            <!-- Planner Day Cards -->
+            <section id="coa-planner-section" class="coa-planner-section" aria-label="Study Schedule">
+                <!-- Populated dynamically from planner.json by coa-planner.js -->
+            </section>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

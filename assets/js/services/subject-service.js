@@ -3,7 +3,7 @@
  */
 
 const FALLBACK_SUBJECTS = [
-    { "id": "coa", "name": "Computer Organization & Architecture", "icon": "cpu", "accent": "purple", "totalTasks": 0 },
+    { "id": "coa", "name": "Computer Organization & Architecture", "icon": "cpu", "accent": "purple", "totalTasks": 72, "hasPlanner": true, "plannerUrl": "subjects/coa/index.html" },
     { "id": "os", "name": "Operating System", "icon": "terminal", "accent": "blue", "totalTasks": 0 },
     { "id": "dbms", "name": "DBMS", "icon": "database", "accent": "cyan", "totalTasks": 0 },
     { "id": "cn", "name": "Computer Networks", "icon": "globe", "accent": "emerald", "totalTasks": 0 },
@@ -56,6 +56,8 @@ window.GateSubjectService = {
             card.dataset.id = sub.id;
             card.dataset.name = sub.name.toLowerCase();
 
+            const subjectHref = sub.plannerUrl ? sub.plannerUrl : `subjects/subject.html?id=${sub.id}`;
+
             card.innerHTML = `
                 <div class="card-glow"></div>
                 <div class="card-header">
@@ -77,7 +79,7 @@ window.GateSubjectService = {
                     </div>
                 </div>
                 
-                <a href="subjects/subject.html?id=${sub.id}" class="continue-btn" data-id="${sub.id}">
+                <a href="${subjectHref}" class="continue-btn" data-id="${sub.id}">
                     <span>Continue Hub</span>
                     <i data-lucide="arrow-right"></i>
                 </a>
