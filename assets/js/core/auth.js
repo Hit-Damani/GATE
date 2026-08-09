@@ -171,6 +171,9 @@ window.GateAuthManager = {
         if (routeName === 'DASHBOARD') {
             return (isAuthFolder || isSubjectsFolder) ? '../index.html' : 'index.html';
         }
+        if (routeName === 'ACTIVITY') {
+            return (isAuthFolder || isSubjectsFolder) ? '../activity.html' : 'activity.html';
+        }
         if (routeName === 'LOGIN') {
             return isAuthFolder ? 'login.html' : (isSubjectsFolder ? '../auth/login.html' : 'auth/login.html');
         }

@@ -74,6 +74,10 @@
                 <i data-lucide="layout-dashboard"></i>
                 <span>Dashboard</span>
             </a>
+            <a href="activity.html" class="menu-item">
+                <i data-lucide="calendar-days"></i>
+                <span>Activity</span>
+            </a>
         </nav>
 
         <div class="sidebar-footer">
@@ -152,7 +156,7 @@
                     <!-- 2x4 Grid Stats boxes -->
                     <div class="glass-panel stats-grid-card">
 
-                        <!-- Row 1: Subjects stats + Streak -->
+                        <!-- Row 1: Subjects stats -->
                         <div class="stat-box subjects">
                             <div class="stat-num-container">
                                 <span class="stat-num" id="stat-total-subjects">0</span>
@@ -175,14 +179,6 @@
                                 <div class="stat-icon-wrapper"><i data-lucide="book"></i></div>
                             </div>
                             <span class="stat-label">Remaining Subjects</span>
-                        </div>
-
-                        <div class="stat-box streak" data-tooltip="Complete daily targets to maintain your streak!">
-                            <div class="stat-num-container">
-                                <span class="stat-num" id="streak-val">12</span>
-                                <div class="stat-icon-wrapper"><i data-lucide="flame"></i></div>
-                            </div>
-                            <span class="stat-label">Study Streak</span>
                         </div>
 
                         <!-- Row 2: Tasks stats + Completion Date -->
@@ -217,6 +213,15 @@
                             </div>
                             <span class="stat-label">Est. Completion</span>
                         </div>
+
+                        <!-- Clickable Activity Stat Box linking to Activity page -->
+                        <a href="activity.html" class="stat-box activity-trigger" id="activity-trigger-box" data-tooltip="Click to view full study calendar">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="active-days-val">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="calendar-days"></i></div>
+                            </div>
+                            <span class="stat-label">Active Days</span>
+                        </a>
                     </div>
                 </section>
 

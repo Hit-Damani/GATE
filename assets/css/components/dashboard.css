@@ -184,12 +184,31 @@
 .stat-box.subjects .stat-icon-wrapper { background: rgba(var(--accent-purple), 0.1); color: rgb(var(--accent-purple)); }
 .stat-box.completed .stat-icon-wrapper { background: rgba(var(--accent-emerald), 0.1); color: rgb(var(--accent-emerald)); }
 .stat-box.remaining-subjects .stat-icon-wrapper { background: rgba(var(--accent-blue), 0.1); color: rgb(var(--accent-blue)); }
-.stat-box.streak .stat-icon-wrapper { background: rgba(var(--accent-rose), 0.1); color: rgb(var(--accent-rose)); }
 .stat-box.tasks .stat-icon-wrapper { background: rgba(var(--accent-cyan), 0.1); color: rgb(var(--accent-cyan)); }
 .stat-box.est .stat-icon-wrapper { background: rgba(var(--accent-amber), 0.1); color: rgb(var(--accent-amber)); }
 
-.stat-box.streak .stat-num { color: rgb(var(--accent-rose)); }
 .stat-box.est .stat-num { font-size: 1.15rem; font-weight: 800; }
+
+/* ── Activity Trigger Stat Box ───────────────────────── */
+.stat-box.activity-trigger {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.stat-box.activity-trigger:hover {
+    background: rgba(var(--accent-emerald), 0.06);
+    border-color: rgba(var(--accent-emerald), 0.15);
+    transform: translateY(-2px);
+}
+
+.stat-box.activity-trigger .stat-icon-wrapper {
+    background: rgba(var(--accent-emerald), 0.1);
+    color: rgb(var(--accent-emerald));
+}
+
+.stat-box.activity-trigger .stat-num {
+    color: rgb(var(--accent-emerald));
+}
 
 @media (max-width: 1200px) {
     .stats-grid-card {

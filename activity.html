@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Activity — GATE 2027</title>
+    <meta name="description" content="Track your daily study activity with month-by-month calendars showing task completions.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="assets/css/components/dashboard.css">
+    <link rel="stylesheet" href="assets/css/components/activity.css">
+
+    <!-- CDN Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Config & Core -->
+    <script src="assets/js/config/config.js" defer></script>
+    <script src="assets/js/core/auth.js" defer></script>
+    <script src="assets/js/core/error-handler.js" defer></script>
+    <script src="assets/js/core/utils.js" defer></script>
+    <script src="assets/js/core/storage.js" defer></script>
+    <script src="assets/js/core/ui.js" defer></script>
+
+    <!-- Services -->
+    <script src="assets/js/services/progress-service.js" defer></script>
+
+    <!-- Application Entry Point -->
+    <script src="assets/js/app.js" defer></script>
+</head>
+
+<body class="app-layout">
+
+    <!-- Loading Overlay -->
+    <div id="app-loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">Loading your workspace...</span>
+        </div>
+    </div>
+
+    <!-- Offline Banner -->
+    <div id="offline-banner">⚠ You're offline. Some features may be unavailable.</div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Ambient Pulsing Background -->
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    <!-- Sidebar -->
+    <aside class="app-sidebar" id="app-sidebar-el">
+        <a href="index.html" class="sidebar-brand">
+            <div class="brand-logo">
+                <i data-lucide="target"></i>
+            </div>
+            <span class="brand-name">GATE 2027</span>
+        </a>
+
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="activity.html" class="menu-item active">
+                <i data-lucide="calendar-days"></i>
+                <span>Activity</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar" id="user-avatar-initials" title="Target: All India Rank 100">GA</div>
+            <div class="user-meta">
+                <span class="user-name" id="user-display-name">GATE Aspirant</span>
+                <span class="user-goal" id="user-target-goal">Target: AIR &lt; 100</span>
+            </div>
+        </div>
+        <div style="padding: 0 1.25rem 1.25rem;">
+            <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+                <i data-lucide="log-out"></i>
+                <span>Log out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay-el" aria-hidden="true"></div>
+
+    <!-- Main Content -->
+    <div class="app-main">
+
+        <!-- Top Bar -->
+        <header class="app-topbar">
+            <!-- Sidebar toggle menu (Hamburger button) -->
+            <button class="topbar-toggle" id="sidebar-toggle-btn" aria-label="Toggle Navigation Menu">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <div class="topbar-widgets">
+                <div class="topbar-clock" id="header-clock-widget">
+                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
+                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="content-wrapper">
+            <div class="activity-page-wrapper" id="activity-page-container">
+
+                <!-- Page Header -->
+                <div class="activity-page-header">
+                    <div class="activity-title-area">
+                        <h1>Study Activity</h1>
+                        <p>Your daily task completion history, month by month.</p>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="activity-legend-bar">
+                    <span class="legend-item"><span class="legend-swatch no-activity"></span>No activity</span>
+                    <span class="legend-item"><span class="legend-swatch light-activity"></span>1–2 tasks</span>
+                    <span class="legend-item"><span class="legend-swatch active"></span>3+ tasks</span>
+                </div>
+
+                <!-- Calendars rendered here by JS -->
+                <div class="activity-months-list" id="activity-months-list">
+                    <!-- Each month card injected dynamically -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

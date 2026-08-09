@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const isDashboardPage = document.getElementById('subject-grid');
+        const isActivityPage = document.getElementById('activity-months-list');
         const isSubjectPage = document.getElementById('subject-content-container');
 
         // Initialize storage with lightweight or full dataset based on current page
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (isDashboardPage) {
             await initDashboardFlow();
+        } else if (isActivityPage) {
+            await initActivityFlow();
         } else if (isSubjectPage) {
             await initSubjectFlow();
         }
@@ -46,6 +49,7 @@ async function initDashboardFlow() {
     window.GateSubjectService.renderSubjectCards(subjects);
     window.GateProgressService.updateAndAnimateStats(subjects, true);
     window.GateProgressService.initCharts(subjects);
+    await window.GateProgressService.updateActiveDaysStat();
 
     // Populate sidebar with user profile info
     if (window.GateProfileService) {
@@ -53,6 +57,22 @@ async function initDashboardFlow() {
     }
 
     // Wire up logout button
+    const logoutBtn = document.getElementById('sidebar-logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await window.GateAuthManager.logout();
+        });
+    }
+}
+
+async function initActivityFlow() {
+    if (!window.GateProgressService) return;
+    await window.GateProgressService.initActivityPage();
+
+    if (window.GateProfileService) {
+        await window.GateProfileService.populateSidebar();
+    }
+
     const logoutBtn = document.getElementById('sidebar-logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {

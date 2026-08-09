@@ -11,6 +11,7 @@ window.GATE_CONFIG = Object.freeze({
 window.GATE_CONSTANTS = Object.freeze({
     ROUTES: {
         DASHBOARD: '/index.html',
+        ACTIVITY: '/activity.html',
         SUBJECT: '/subjects/subject.html',
         LOGIN: '/auth/login.html',
         SIGNUP: '/auth/signup.html'

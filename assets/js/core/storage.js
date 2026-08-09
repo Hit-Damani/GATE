@@ -49,10 +49,9 @@ window.GateStorage = {
                 return;
             }
 
-            // Full init for dashboard (includes streaks & profiles)
-            const [progressRes, streakRes, completionsRes, profileRes] = await Promise.all([
+            // Full init for dashboard (includes progress, task completions & profile)
+            const [progressRes, completionsRes, profileRes] = await Promise.all([
                 GateSupabase.client.from('subject_progress').select('*').eq('user_id', userId),
-                GateSupabase.client.from('user_streaks').select('*').eq('user_id', userId).maybeSingle(),
                 GateSupabase.client.from('task_completions').select('task_id, subject_id').eq('user_id', userId),
                 GateSupabase.client.from('profiles').select('*').eq('id', userId).maybeSingle()
             ]);
@@ -63,18 +62,6 @@ window.GateStorage = {
                 progressRes.data.forEach(p => {
                     this._cache.progress[p.subject_id] = p;
                 });
-            }
-
-            // Cache streak data
-            if (streakRes.data) {
-                this._cache.streak = streakRes.data;
-            } else {
-                const { data: newStreak } = await GateSupabase.client
-                    .from('user_streaks')
-                    .upsert({ user_id: userId, current_streak: 0, best_streak: 0 }, { onConflict: 'user_id' })
-                    .select()
-                    .maybeSingle();
-                this._cache.streak = newStreak || { current_streak: 0, best_streak: 0, last_active_date: null };
             }
 
             // Cache profile
@@ -163,6 +150,44 @@ window.GateStorage = {
         if (subjectId) {
             localStorage.setItem('gate_2027_last_active', subjectId);
         }
+    },
+
+    /**
+     * Get activity data for a given month.
+     * Returns a Map of day-of-month -> task count.
+     */
+    async getActivityDates(year, month) {
+        const activityMap = new Map();
+        if (!this._userId) return activityMap;
+
+        try {
+            const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+            const lastDay = new Date(year, month, 0).getDate();
+            const endDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+
+            const { data, error } = await GateSupabase.client
+                .from('task_completions')
+                .select('completed_date')
+                .eq('user_id', this._userId)
+                .gte('completed_date', startDate)
+                .lte('completed_date', endDate);
+
+            if (error) {
+                console.error('[GateStorage] getActivityDates error:', error);
+                return activityMap;
+            }
+
+            if (data) {
+                data.forEach(row => {
+                    const day = new Date(row.completed_date).getDate();
+                    activityMap.set(day, (activityMap.get(day) || 0) + 1);
+                });
+            }
+        } catch (err) {
+            console.error('[GateStorage] getActivityDates failed:', err);
+        }
+
+        return activityMap;
     },
 
     getStreakData() {
