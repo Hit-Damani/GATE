@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Optimization -->
+    <title>Subject Hub | GATE 2027</title>
+    <meta name="description" content="View notes, formula cards, and practice DPPs for GATE CSE 2027 preparation.">
+    <meta name="keywords" content="GATE 2027, Computer Science, subject notes, DPP, study tracker">
+    <meta name="author" content="GATE Aspirant">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/components/subjects.css">
+    <link rel="stylesheet" href="../assets/css/components/planner.css">
+
+    <!-- Vector Icons CDN (Lucide) -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Core Services -->
+    <script src="../assets/js/core/utils.js" defer></script>
+    <script src="../assets/js/core/storage.js" defer></script>
+    <script src="../assets/js/core/ui.js" defer></script>
+
+    <!-- Functional Feature Services -->
+    <script src="../assets/js/services/subject-service.js" defer></script>
+    <script src="../assets/js/services/progress-service.js" defer></script>
+    <script src="../assets/js/services/planner-service.js" defer></script>
+
+    <!-- Application Entry Point Router -->
+    <script src="../assets/js/app.js" defer></script>
+</head>
+
+<body class="app-layout">
+
+    <!-- Ambient Pulsing Background -->
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    <!-- App Main Layout area -->
+    <div class="app-main">
+
+        <!-- Sticky Top Action Bar -->
+        <header class="app-topbar">
+            <a href="../index.html" class="subject-back-nav" id="back-to-dashboard-btn" aria-label="Back to Dashboard">
+                <i data-lucide="arrow-left"></i>
+            </a>
+
+            <div class="topbar-widgets">
+                <div class="topbar-clock" id="header-clock-widget">
+                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
+                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Wrapper -->
+        <main class="content-wrapper">
+            <div class="subject-wrapper">
+
+                <!-- Subject Header Panel -->
+                <section class="subject-header-panel" aria-label="Subject Header Information">
+                    <div class="subject-info-block">
+                        <div class="subject-badge-icon" id="subject-badge-icon">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="subject-text-details">
+                            <h1 id="subject-title">Subject Hub</h1>
+                            <p id="subject-description">Loading subject details...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Subject Dynamic Content Container (Notes Grid or Subject Hub Overview) -->
+                <div id="subject-content-container" class="tab-pane">
+                    <!-- Loaded dynamically via assets/js/services/planner-service.js -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
