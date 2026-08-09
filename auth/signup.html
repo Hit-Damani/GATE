@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <title>Sign Up — GATE 2027 Tracker</title>
+    <meta name="description" content="Create your GATE 2027 study tracker account to sync progress across all your devices.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Config & Core -->
+    <script src="../assets/js/config/config.js" defer></script>
+    <script src="../assets/js/core/error-handler.js" defer></script>
+    <script src="../assets/js/core/auth.js" defer></script>
+</head>
+
+<body class="auth-page" style="background-color: #06040a; color: #f8fafc;">
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Background Canvas -->
+    <div class="auth-bg-canvas" aria-hidden="true"></div>
+
+    <!-- Auth Card -->
+    <div class="auth-card">
+
+        <!-- Brand -->
+        <a href="../index.html" class="auth-brand">
+            <div class="auth-brand-logo">
+                <i data-lucide="target"></i>
+            </div>
+            <span class="auth-brand-name">GATE 2027</span>
+        </a>
+
+        <h1 class="auth-title">Create your account</h1>
+        <p class="auth-subtitle">Start tracking your GATE CSE preparation with cross-device sync.</p>
+
+        <!-- Global Error/Success Message -->
+        <div class="auth-message" id="auth-message" role="alert"></div>
+
+        <!-- Signup Form -->
+        <form class="auth-form" id="signup-form" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="signup-name">Display Name</label>
+                <input class="form-input" type="text" id="signup-name" placeholder="e.g. GATE Aspirant" required autocomplete="name" maxlength="50">
+                <span class="form-error" id="name-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="signup-email">Email Address</label>
+                <input class="form-input" type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email">
+                <span class="form-error" id="email-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="signup-password">Password</label>
+                <input class="form-input" type="password" id="signup-password" placeholder="Minimum 8 characters" required autocomplete="new-password" minlength="8">
+                <span class="form-error" id="password-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="signup-confirm">Confirm Password</label>
+                <input class="form-input" type="password" id="signup-confirm" placeholder="Re-enter your password" required autocomplete="new-password">
+                <span class="form-error" id="confirm-error"></span>
+            </div>
+
+            <button type="submit" class="auth-btn" id="signup-btn">
+                <span class="btn-spinner"></span>
+                <span class="btn-text">Create Account</span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            Already have an account? <a href="login.html">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.lucide) lucide.createIcons();
+
+            // Redirect if already logged in
+            if (window.GateAuthManager) {
+                const redirected = await GateAuthManager.redirectIfAuthenticated();
+                if (redirected) return;
+            }
+
+            const form = document.getElementById('signup-form');
+            const nameInput = document.getElementById('signup-name');
+            const emailInput = document.getElementById('signup-email');
+            const passwordInput = document.getElementById('signup-password');
+            const confirmInput = document.getElementById('signup-confirm');
+            const submitBtn = document.getElementById('signup-btn');
+            const messageBox = document.getElementById('auth-message');
+            const CONSTANTS = window.GATE_CONSTANTS;
+            const MIN_PW = CONSTANTS?.VALIDATION?.MIN_PASSWORD_LENGTH || 8;
+
+            function showMessage(text, type = 'error') {
+                if (window.GateErrorHandler) {
+                    window.GateErrorHandler.showToast(text, type, 4500);
+                }
+            }
+
+            function hideMessage() {}
+
+            function setLoading(loading) {
+                submitBtn.disabled = loading;
+                submitBtn.classList.toggle('loading', loading);
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                hideMessage();
+
+                const displayName = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirm = confirmInput.value;
+
+                // Validate
+                if (!displayName) {
+                    showMessage(CONSTANTS?.ERRORS?.DISPLAY_NAME_REQUIRED || 'Please enter a display name.');
+                    nameInput.focus();
+                    return;
+                }
+
+                if (!email || !(CONSTANTS?.VALIDATION?.EMAIL_REGEX || /^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email)) {
+                    showMessage(CONSTANTS?.ERRORS?.INVALID_EMAIL || 'Please enter a valid email address.');
+                    emailInput.focus();
+                    return;
+                }
+
+                if (password.length < MIN_PW) {
+                    showMessage(CONSTANTS?.ERRORS?.WEAK_PASSWORD || `Password must be at least ${MIN_PW} characters.`);
+                    passwordInput.focus();
+                    return;
+                }
+
+                if (password !== confirm) {
+                    showMessage(CONSTANTS?.ERRORS?.PASSWORDS_MISMATCH || 'Passwords do not match.');
+                    confirmInput.focus();
+                    return;
+                }
+
+                setLoading(true);
+
+                const { data, error } = await GateAuthService.signUp(email, password, displayName);
+
+                if (error) {
+                    setLoading(false);
+                    const msg = error.message || '';
+                    if (msg.includes('already registered') || msg.includes('already been registered')) {
+                        showMessage(CONSTANTS?.ERRORS?.USER_ALREADY_EXISTS || 'An account with this email already exists.');
+                    } else if (msg.includes('password')) {
+                        showMessage(CONSTANTS?.ERRORS?.WEAK_PASSWORD || 'Password is too weak.');
+                    } else {
+                        showMessage(msg || CONSTANTS?.ERRORS?.GENERIC_ERROR || 'Signup failed.');
+                    }
+                    return;
+                }
+
+                setLoading(false);
+
+                // Check if email confirmation is required
+                if (data?.user?.identities?.length === 0) {
+                    showMessage(CONSTANTS?.ERRORS?.USER_ALREADY_EXISTS || 'An account with this email already exists.', 'error');
+                } else if (data?.session) {
+                    // Auto-confirmed — instant redirect with spinner feedback
+                    submitBtn.querySelector('.btn-text').textContent = 'Redirecting...';
+                    window.location.href = '../index.html';
+                } else {
+                    // Email confirmation required
+                    showMessage(CONSTANTS?.ERRORS?.SIGNUP_SUCCESS || 'Account created! Check your email to verify.', 'success');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

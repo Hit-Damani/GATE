@@ -14,11 +14,12 @@ window.GatePlannerService = {
         }
 
         if (window.GateStorage && currentSubject) {
+            // saveLastActiveSubject is now async
             window.GateStorage.saveLastActiveSubject(currentSubject.id);
         }
 
         if (currentSubject) {
-            this.renderSubjectPage(currentSubject);
+            await this.renderSubjectPage(currentSubject);
         }
     },
 
@@ -32,9 +33,7 @@ window.GatePlannerService = {
         if (iconEl) iconEl.innerHTML = `<i data-lucide="${subject.icon}"></i>`;
         if (titleEl) titleEl.textContent = subject.name;
         if (descEl) {
-            descEl.textContent = (subject.hasPlanner || subject.hasNotes)
-                ? `Core ${subject.name.toLowerCase()} study schedule, notes, and revision progress.`
-                : `Core ${subject.name.toLowerCase()} study schedule, notes, and revision progress.`;
+            descEl.textContent = `Core ${subject.name.toLowerCase()} study schedule, notes, and revision progress.`;
         }
 
         const container = document.getElementById('subject-content-container');
@@ -73,6 +72,11 @@ window.GatePlannerService = {
             return;
         }
 
+        // Get user's completed tasks from cache
+        const completedTaskIds = window.GateStorage
+            ? window.GateStorage.getTaskCompletions(subject.id)
+            : new Set();
+
         let html = `<div class="planner-schedule-container">`;
         plannerDays.forEach(day => {
             html += `
@@ -86,9 +90,10 @@ window.GatePlannerService = {
 
             if (day.tasks && day.tasks.length > 0) {
                 day.tasks.forEach(task => {
+                    const isChecked = completedTaskIds.has(task.id) ? 'checked' : '';
                     html += `
                         <label class="task-checkbox-item">
-                            <input type="checkbox" data-task-id="${task.id}" />
+                            <input type="checkbox" data-task-id="${task.id}" data-subject-id="${subject.id}" ${isChecked} />
                             <span class="checkmark"></span>
                             <span class="task-label">${task.title || task.id}</span>
                         </label>
@@ -100,6 +105,66 @@ window.GatePlannerService = {
         });
         html += `</div>`;
         container.innerHTML = html;
+
+        // Wire up checkbox change handlers for persistence
+        this._wireCheckboxHandlers(container, subject, plannerDays);
+    },
+
+    /**
+     * Attach change listeners to all planner checkboxes.
+     * On check/uncheck: persist to task_completions, recalculate subject_progress.
+     * @param {HTMLElement} container
+     * @param {object} subject
+     * @param {Array} plannerDays
+     */
+    _wireCheckboxHandlers(container, subject, plannerDays) {
+        if (!window.GateStorage) return;
+
+        // Calculate total tasks from planner data
+        let totalTasks = 0;
+        plannerDays.forEach(day => {
+            if (day.tasks) totalTasks += day.tasks.length;
+        });
+
+        const checkboxes = container.querySelectorAll('input[type="checkbox"][data-task-id]');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', async (e) => {
+                const taskId = e.target.dataset.taskId;
+                const subjectId = e.target.dataset.subjectId || subject.id;
+                const isChecked = e.target.checked;
+
+                try {
+                    let success;
+                    if (isChecked) {
+                        success = await window.GateStorage.completeTask(taskId, subjectId);
+                    } else {
+                        success = await window.GateStorage.uncompleteTask(taskId);
+                    }
+
+                    if (!success) {
+                        // Revert checkbox on failure
+                        e.target.checked = !isChecked;
+                        if (window.GateErrorHandler) {
+                            window.GateErrorHandler.showToast('Failed to save. Please try again.', 'error');
+                        }
+                        return;
+                    }
+
+                    // Recalculate subject progress from completion count
+                    const completedCount = window.GateStorage.getCompletedTaskCount(subjectId);
+                    const effectiveTotal = totalTasks || subject.totalTasks || 0;
+                    await window.GateStorage.setSubjectProgress(subjectId, completedCount, effectiveTotal);
+
+                } catch (err) {
+                    // Revert on error
+                    e.target.checked = !isChecked;
+                    if (window.GateErrorHandler) {
+                        window.GateErrorHandler.show(err);
+                    }
+                }
+            });
+        });
     },
 
     renderNotesGrid(container, notesList) {

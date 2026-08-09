@@ -84,6 +84,7 @@ window.GateSubjectService = {
             `;
 
             card.addEventListener('click', () => {
+                // saveLastActiveSubject is async (Supabase) but fire-and-forget is OK here
                 if (window.GateStorage) window.GateStorage.saveLastActiveSubject(sub.id);
             });
 

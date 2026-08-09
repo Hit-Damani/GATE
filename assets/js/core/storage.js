@@ -1,42 +1,121 @@
 /**
- * GATE 2027 Core Storage & Progress Aggregator Engine
+ * GATE 2027 Core Storage & Profile Engine
+ * Handles user progress, streaks, task completions, and profiles backed by Supabase.
  */
-const STORAGE_KEYS = {
-    PROGRESS: 'gate_2027_progress_map',
-    LAST_ACTIVE: 'gate_2027_last_active',
-    THEME: 'gate_2027_theme',
-    STREAK: 'gate_2027_streak_data'
-};
 
+// 1. Storage & Progress Aggregator
 window.GateStorage = {
-    getSubjectProgress(subjectId, defaultTotal = 50) {
+    _userId: null,
+    _cache: {
+        progress: {},
+        streak: null,
+        completions: {},
+        profile: null
+    },
+    _initialized: false,
+
+    async init(userId, options = {}) {
+        if (!userId) {
+            console.error('[GateStorage] init called without userId');
+            return;
+        }
+        this._userId = userId;
+
         try {
-            const raw = localStorage.getItem(STORAGE_KEYS.PROGRESS);
-            const progressMap = raw ? JSON.parse(raw) : {};
-            
-            if (progressMap[subjectId]) {
-                const sub = progressMap[subjectId];
-                
-                if (Number(sub.totalTasks) !== Number(defaultTotal)) {
-                    sub.totalTasks = Number(defaultTotal);
-                    sub.percentage = sub.totalTasks > 0 ? Math.round((Number(sub.completedTasks) || 0) / sub.totalTasks * 100) : 0;
-                    sub.percentage = Math.min(sub.percentage, 100);
-                    
-                    progressMap[subjectId] = sub;
-                    localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progressMap));
+            // Lightweight init for subject page (skips profile & streak queries)
+            if (options.isSubjectPage) {
+                const [progressRes, completionsRes] = await Promise.all([
+                    GateSupabase.client.from('subject_progress').select('*').eq('user_id', userId),
+                    GateSupabase.client.from('task_completions').select('task_id, subject_id').eq('user_id', userId)
+                ]);
+
+                this._cache.progress = {};
+                if (progressRes.data) {
+                    progressRes.data.forEach(p => {
+                        this._cache.progress[p.subject_id] = p;
+                    });
                 }
 
-                const percentage = sub.totalTasks > 0 ? Math.round((Number(sub.completedTasks) || 0) / sub.totalTasks * 100) : 0;
-                return {
-                    completedTasks: Number(sub.completedTasks) || 0,
-                    totalTasks: sub.totalTasks,
-                    percentage: percentage
-                };
+                this._cache.completions = {};
+                if (completionsRes.data) {
+                    completionsRes.data.forEach(tc => {
+                        if (!this._cache.completions[tc.subject_id]) {
+                            this._cache.completions[tc.subject_id] = new Set();
+                        }
+                        this._cache.completions[tc.subject_id].add(tc.task_id);
+                    });
+                }
+                this._initialized = true;
+                return;
             }
-        } catch (e) {
-            console.error('Error reading subject progress from localStorage', e);
+
+            // Full init for dashboard (includes streaks & profiles)
+            const [progressRes, streakRes, completionsRes, profileRes] = await Promise.all([
+                GateSupabase.client.from('subject_progress').select('*').eq('user_id', userId),
+                GateSupabase.client.from('user_streaks').select('*').eq('user_id', userId).maybeSingle(),
+                GateSupabase.client.from('task_completions').select('task_id, subject_id').eq('user_id', userId),
+                GateSupabase.client.from('profiles').select('*').eq('id', userId).maybeSingle()
+            ]);
+
+            // Cache progress indexed by subject_id
+            this._cache.progress = {};
+            if (progressRes.data) {
+                progressRes.data.forEach(p => {
+                    this._cache.progress[p.subject_id] = p;
+                });
+            }
+
+            // Cache streak data
+            if (streakRes.data) {
+                this._cache.streak = streakRes.data;
+            } else {
+                const { data: newStreak } = await GateSupabase.client
+                    .from('user_streaks')
+                    .upsert({ user_id: userId, current_streak: 0, best_streak: 0 }, { onConflict: 'user_id' })
+                    .select()
+                    .maybeSingle();
+                this._cache.streak = newStreak || { current_streak: 0, best_streak: 0, last_active_date: null };
+            }
+
+            // Cache profile
+            if (profileRes.data) {
+                this._cache.profile = profileRes.data;
+            } else {
+                const { data: newProfile } = await GateSupabase.client
+                    .from('profiles')
+                    .upsert({ id: userId, display_name: 'GATE Aspirant' })
+                    .select()
+                    .maybeSingle();
+                this._cache.profile = newProfile || { display_name: 'GATE Aspirant' };
+            }
+
+            // Cache task completions
+            this._cache.completions = {};
+            if (completionsRes.data) {
+                completionsRes.data.forEach(tc => {
+                    if (!this._cache.completions[tc.subject_id]) {
+                        this._cache.completions[tc.subject_id] = new Set();
+                    }
+                    this._cache.completions[tc.subject_id].add(tc.task_id);
+                });
+            }
+
+            this._initialized = true;
+        } catch (err) {
+            console.error('[GateStorage] init failed:', err);
+            this._initialized = true;
         }
-        
+    },
+
+    getSubjectProgress(subjectId, defaultTotal = 50) {
+        const cached = this._cache.progress[subjectId];
+        if (cached) {
+            return {
+                completedTasks: Number(cached.completed_tasks) || 0,
+                totalTasks: Number(cached.total_tasks) || Number(defaultTotal),
+                percentage: Number(cached.percentage) || 0
+            };
+        }
         return {
             completedTasks: 0,
             totalTasks: defaultTotal,
@@ -44,77 +123,176 @@ window.GateStorage = {
         };
     },
 
-    setSubjectProgress(subjectId, completedTasks, totalTasks) {
+    async setSubjectProgress(subjectId, completedTasks, totalTasks) {
+        const comp = Math.max(0, Number(completedTasks) || 0);
+        const tot = Math.max(0, Number(totalTasks) || 0);
+        const percentage = tot > 0 ? Math.round((comp / tot) * 100) : 0;
+        const boundedPct = Math.min(percentage, 100);
+
+        const progressData = {
+            user_id: this._userId,
+            subject_id: subjectId,
+            completed_tasks: comp,
+            total_tasks: tot,
+            percentage: boundedPct
+        };
+
         try {
-            const raw = localStorage.getItem(STORAGE_KEYS.PROGRESS);
-            const progressMap = raw ? JSON.parse(raw) : {};
-            
-            const comp = Math.max(0, Number(completedTasks) || 0);
-            const tot = Math.max(0, Number(totalTasks) || 0);
-            const percentage = tot > 0 ? Math.round((comp / tot) * 100) : 0;
-            
-            const progressData = {
-                completedTasks: comp,
-                totalTasks: tot,
-                percentage: Math.min(percentage, 100),
-                lastUpdated: new Date().toISOString()
-            };
-            
-            progressMap[subjectId] = progressData;
-            localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progressMap));
-            this.updateStreak();
-            return progressData;
-        } catch (e) {
-            console.error('Error saving subject progress to localStorage', e);
-            return null;
+            await GateSupabase.client
+                .from('subject_progress')
+                .upsert(progressData, { onConflict: 'user_id,subject_id' });
+        } catch (err) {
+            console.error('[GateStorage] setSubjectProgress failed:', err);
         }
+
+        this._cache.progress[subjectId] = progressData;
+        this.updateStreak();
+
+        return {
+            completedTasks: comp,
+            totalTasks: tot,
+            percentage: boundedPct
+        };
     },
 
     getLastActiveSubject() {
-        return localStorage.getItem(STORAGE_KEYS.LAST_ACTIVE) || 'os';
+        return localStorage.getItem('gate_2027_last_active') || 'os';
     },
 
     saveLastActiveSubject(subjectId) {
         if (subjectId) {
-            localStorage.setItem(STORAGE_KEYS.LAST_ACTIVE, subjectId);
+            localStorage.setItem('gate_2027_last_active', subjectId);
         }
     },
 
     getStreakData() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEYS.STREAK);
-            if (raw) return JSON.parse(raw);
-        } catch (e) {
-            console.error('Error reading streak data', e);
+        const streak = this._cache.streak;
+        if (streak) {
+            return {
+                currentStreak: Number(streak.current_streak) || 0,
+                bestStreak: Number(streak.best_streak) || 0,
+                lastActiveDate: streak.last_active_date || null
+            };
         }
-        return { currentStreak: 0, lastActiveDate: null };
+        return { currentStreak: 0, bestStreak: 0, lastActiveDate: null };
     },
 
-    updateStreak() {
-        const streak = this.getStreakData();
+    async updateStreak() {
+        const streak = this._cache.streak || {
+            current_streak: 0,
+            best_streak: 0,
+            last_active_date: null
+        };
         const today = new Date().toISOString().split('T')[0];
-        
-        if (!streak.lastActiveDate) {
-            streak.currentStreak = 1;
-            streak.lastActiveDate = today;
-        } else if (streak.lastActiveDate !== today) {
-            const lastDate = new Date(streak.lastActiveDate);
+
+        if (!streak.last_active_date) {
+            streak.current_streak = 1;
+            streak.last_active_date = today;
+        } else if (streak.last_active_date !== today) {
+            const lastDate = new Date(streak.last_active_date);
             const currDate = new Date(today);
             const diffTime = Math.abs(currDate - lastDate);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
+
             if (diffDays === 1) {
-                streak.currentStreak += 1;
+                streak.current_streak += 1;
             } else if (diffDays > 1) {
-                streak.currentStreak = 1;
+                streak.current_streak = 1;
             }
-            streak.lastActiveDate = today;
+            streak.last_active_date = today;
         }
-        localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(streak));
-        return streak;
+
+        if (streak.current_streak > (streak.best_streak || 0)) {
+            streak.best_streak = streak.current_streak;
+        }
+
+        try {
+            await GateSupabase.client
+                .from('user_streaks')
+                .upsert({
+                    user_id: this._userId,
+                    current_streak: streak.current_streak,
+                    best_streak: streak.best_streak,
+                    last_active_date: streak.last_active_date
+                }, { onConflict: 'user_id' });
+        } catch (err) {
+            console.error('[GateStorage] updateStreak failed:', err);
+        }
+
+        this._cache.streak = streak;
+
+        return {
+            currentStreak: streak.current_streak,
+            bestStreak: streak.best_streak,
+            lastActiveDate: streak.last_active_date
+        };
+    },
+
+    async completeTask(taskId, subjectId) {
+        try {
+            const { error } = await GateSupabase.client
+                .from('task_completions')
+                .upsert({
+                    user_id: this._userId,
+                    task_id: taskId,
+                    subject_id: subjectId,
+                    is_completed: true,
+                    completed_at: new Date().toISOString(),
+                    completed_date: new Date().toISOString().split('T')[0]
+                }, { onConflict: 'user_id,task_id' });
+
+            if (error) {
+                console.error('[GateStorage] completeTask error:', error);
+                return false;
+            }
+
+            if (!this._cache.completions[subjectId]) {
+                this._cache.completions[subjectId] = new Set();
+            }
+            this._cache.completions[subjectId].add(taskId);
+
+            return true;
+        } catch (err) {
+            console.error('[GateStorage] completeTask failed:', err);
+            return false;
+        }
+    },
+
+    async uncompleteTask(taskId) {
+        try {
+            const { error } = await GateSupabase.client
+                .from('task_completions')
+                .delete()
+                .eq('user_id', this._userId)
+                .eq('task_id', taskId);
+
+            if (error) {
+                console.error('[GateStorage] uncompleteTask error:', error);
+                return false;
+            }
+
+            for (const subjectId in this._cache.completions) {
+                this._cache.completions[subjectId].delete(taskId);
+            }
+
+            return true;
+        } catch (err) {
+            console.error('[GateStorage] uncompleteTask failed:', err);
+            return false;
+        }
+    },
+
+    getTaskCompletions(subjectId) {
+        return this._cache.completions[subjectId] || new Set();
+    },
+
+    getCompletedTaskCount(subjectId) {
+        const completions = this._cache.completions[subjectId];
+        return completions ? completions.size : 0;
     }
 };
 
+// 2. Overall Progress Aggregator
 window.GateProgress = {
     calculateOverall(subjectsList) {
         if (!Array.isArray(subjectsList) || subjectsList.length === 0) {
@@ -159,5 +337,94 @@ window.GateProgress = {
             remainingTasks,
             overallPercentage: Math.min(overallPercentage, 100)
         };
+    }
+};
+
+// 3. Profile Service
+window.GateProfileService = {
+    async getProfile() {
+        if (window.GateStorage?._cache?.profile) {
+            return window.GateStorage._cache.profile;
+        }
+
+        try {
+            const { data: { user } } = await GateSupabase.client.auth.getUser();
+            if (!user) return null;
+
+            let { data } = await GateSupabase.client
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .maybeSingle();
+
+            if (!data) {
+                const displayName = user.user_metadata?.display_name || user.email?.split('@')[0] || 'GATE Aspirant';
+
+                const { data: created } = await GateSupabase.client
+                    .from('profiles')
+                    .upsert({
+                        id: user.id,
+                        display_name: displayName
+                    })
+                    .select()
+                    .maybeSingle();
+                data = created;
+            }
+
+            if (data && window.GateStorage?._cache) {
+                window.GateStorage._cache.profile = data;
+            }
+
+            return data;
+        } catch (err) {
+            console.error('[ProfileService] getProfile failed:', err);
+            return null;
+        }
+    },
+
+    async updateProfile(updates) {
+        try {
+            const { data: { user } } = await GateSupabase.client.auth.getUser();
+            if (!user) return null;
+
+            const { data, error } = await GateSupabase.client
+                .from('profiles')
+                .upsert({
+                    id: user.id,
+                    ...updates
+                })
+                .select()
+                .maybeSingle();
+
+            if (error) {
+                console.error('[ProfileService] updateProfile error:', error);
+                return null;
+            }
+
+            if (data && window.GateStorage?._cache) {
+                window.GateStorage._cache.profile = data;
+            }
+
+            return data;
+        } catch (err) {
+            console.error('[ProfileService] updateProfile failed:', err);
+            return null;
+        }
+    },
+
+    async populateSidebar() {
+        const profile = await this.getProfile();
+        if (!profile) return;
+
+        const nameEl = document.getElementById('user-display-name');
+        const goalEl = document.getElementById('user-target-goal');
+        const avatarEl = document.getElementById('user-avatar-initials');
+
+        const displayName = profile.display_name || 'GATE Aspirant';
+        const initials = displayName.substring(0, 2).toUpperCase();
+
+        if (nameEl) nameEl.textContent = displayName;
+        if (goalEl) goalEl.textContent = profile.email ? profile.email : 'Target: AIR < 100';
+        if (avatarEl) avatarEl.textContent = initials;
     }
 };

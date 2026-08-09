@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <title>Log In — GATE 2027 Tracker</title>
+    <meta name="description" content="Log in to your GATE 2027 study tracker to access your progress, planner, and notes across all devices.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Config & Core -->
+    <script src="../assets/js/config/config.js" defer></script>
+    <script src="../assets/js/core/error-handler.js" defer></script>
+    <script src="../assets/js/core/auth.js" defer></script>
+</head>
+
+<body class="auth-page" style="background-color: #06040a; color: #f8fafc;">
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Background Canvas -->
+    <div class="auth-bg-canvas" aria-hidden="true"></div>
+
+    <!-- Auth Card -->
+    <div class="auth-card">
+
+        <!-- Brand -->
+        <a href="../index.html" class="auth-brand">
+            <div class="auth-brand-logo">
+                <i data-lucide="target"></i>
+            </div>
+            <span class="auth-brand-name">GATE 2027</span>
+        </a>
+
+        <h1 class="auth-title">Welcome back</h1>
+        <p class="auth-subtitle">Log in to continue tracking your GATE preparation progress.</p>
+
+        <!-- Global Error/Success Message -->
+        <div class="auth-message" id="auth-message" role="alert"></div>
+
+        <!-- Login Form -->
+        <form class="auth-form" id="login-form" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="login-email">Email Address</label>
+                <input class="form-input" type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+                <span class="form-error" id="email-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="login-password">Password</label>
+                <input class="form-input" type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+                <span class="form-error" id="password-error"></span>
+            </div>
+
+            <button type="submit" class="auth-btn" id="login-btn">
+                <span class="btn-spinner"></span>
+                <span class="btn-text">Log In</span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.lucide) lucide.createIcons();
+
+            // Redirect if already logged in
+            if (window.GateAuthManager) {
+                const redirected = await GateAuthManager.redirectIfAuthenticated();
+                if (redirected) return;
+            }
+
+            const form = document.getElementById('login-form');
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const submitBtn = document.getElementById('login-btn');
+            const messageBox = document.getElementById('auth-message');
+            const CONSTANTS = window.GATE_CONSTANTS;
+
+            function showMessage(text, type = 'error') {
+                if (window.GateErrorHandler) {
+                    window.GateErrorHandler.showToast(text, type, 4500);
+                }
+            }
+
+            function hideMessage() {}
+
+            function setLoading(loading) {
+                submitBtn.disabled = loading;
+                submitBtn.classList.toggle('loading', loading);
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                hideMessage();
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+
+                // Validate
+                if (!email) {
+                    showMessage(CONSTANTS?.ERRORS?.INVALID_EMAIL || 'Please enter your email.');
+                    emailInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    showMessage(CONSTANTS?.ERRORS?.REQUIRED_FIELD || 'Please enter your password.');
+                    passwordInput.focus();
+                    return;
+                }
+
+                setLoading(true);
+
+                const { data, error } = await GateAuthService.signIn(email, password);
+
+                if (error) {
+                    setLoading(false);
+                    const msg = error.message || '';
+                    if (msg.includes('Invalid login credentials')) {
+                        showMessage(CONSTANTS?.ERRORS?.INVALID_CREDENTIALS || 'Invalid email or password.');
+                    } else if (msg.includes('Email not confirmed')) {
+                        showMessage(CONSTANTS?.ERRORS?.EMAIL_NOT_CONFIRMED || 'Please verify your email first.');
+                    } else {
+                        showMessage(msg || CONSTANTS?.ERRORS?.GENERIC_ERROR || 'Login failed. Please try again.');
+                    }
+                    return;
+                }
+
+                // Success — instant redirect with spinner feedback
+                submitBtn.querySelector('.btn-text').textContent = 'Redirecting...';
+                window.location.href = '../index.html';
+            });
+        });
+    </script>
+
+</body>
+
+</html>

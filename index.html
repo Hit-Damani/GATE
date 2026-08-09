@@ -14,16 +14,20 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
     <link rel="stylesheet" href="assets/css/components/dashboard.css">
     <link rel="stylesheet" href="assets/css/components/subjects.css">
     <link rel="stylesheet" href="assets/css/components/planner.css">
 
-    <!-- Vector Icons CDN (Lucide) -->
+    <!-- CDN Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
-    <!-- Visual Charts CDN (Chart.js UMD) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <!-- Core JS Utilities & Engines (Defer loaded in dependency order) -->
+    <!-- Config & Core -->
+    <script src="assets/js/config/config.js" defer></script>
+    <script src="assets/js/core/auth.js" defer></script>
+    <script src="assets/js/core/error-handler.js" defer></script>
     <script src="assets/js/core/utils.js" defer></script>
     <script src="assets/js/core/storage.js" defer></script>
     <script src="assets/js/core/ui.js" defer></script>
@@ -38,6 +42,20 @@
 </head>
 
 <body class="app-layout">
+
+    <!-- Loading Overlay (shown during auth check + data init) -->
+    <div id="app-loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">Loading your workspace...</span>
+        </div>
+    </div>
+
+    <!-- Offline Banner -->
+    <div id="offline-banner">⚠ You're offline. Some features may be unavailable.</div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
 
     <!-- Ambient Pulsing Background -->
     <div class="bg-canvas" aria-hidden="true"></div>
@@ -59,11 +77,17 @@
         </nav>
 
         <div class="sidebar-footer">
-            <div class="user-avatar" title="Target: All India Rank 100">AIR</div>
+            <div class="user-avatar" id="user-avatar-initials" title="Target: All India Rank 100">GA</div>
             <div class="user-meta">
-                <span class="user-name">GATE Aspirant</span>
-                <span class="user-goal">Target: AIR &lt; 100</span>
+                <span class="user-name" id="user-display-name">GATE Aspirant</span>
+                <span class="user-goal" id="user-target-goal">Target: AIR &lt; 100</span>
             </div>
+        </div>
+        <div style="padding: 0 1.25rem 1.25rem;">
+            <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+                <i data-lucide="log-out"></i>
+                <span>Log out</span>
+            </button>
         </div>
     </aside>
 

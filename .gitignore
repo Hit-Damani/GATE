@@ -1,0 +1,25 @@
+# Environment & Secret Files
+.env
+.env.local
+.env.*.local
+*.env
+
+
+# Dependencies & Package Managers
+node_modules/
+package-lock.json
+
+# IDE / Editor Folders
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs & Temporary Data
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.tmp/
+temp/
