@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Optimization -->
+    <title>GATE 2027 Preparation Tracker</title>
+    <meta name="description"
+        content="A premium, offline-first study management portal for GATE CSE 2027 preparation. Monitor syllabus, organize daily lectures, track streak targets, and view completion stats in style.">
+    <meta name="keywords" content="GATE 2027, GATE CSE, study companion, exam preparation dashboard, revision planner">
+    <meta name="author" content="GATE Aspirant">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <!-- Vector Icons CDN (Lucide) -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <!-- Visual Charts CDN (Chart.js UMD) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Core JS Utilities & Engines (Defer loaded in dependency order) -->
+    <script src="assets/js/utils.js" defer></script>
+    <script src="assets/js/storage.js" defer></script>
+    <script src="assets/js/progress.js" defer></script>
+    <script src="assets/js/common.js" defer></script>
+    <script src="assets/js/dashboard.js" defer></script>
+</head>
+
+<body class="app-layout">
+
+    <!-- Ambient Pulsing Background -->
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    <!-- Desktop left navigation / Mobile drawer -->
+    <aside class="app-sidebar" id="app-sidebar-el">
+        <a href="index.html" class="sidebar-brand">
+            <div class="brand-logo">
+                <i data-lucide="target"></i>
+            </div>
+            <span class="brand-name">GATE 2027</span>
+        </a>
+
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item active">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar" title="Target: All India Rank 100">AIR</div>
+            <div class="user-meta">
+                <span class="user-name">GATE Aspirant</span>
+                <span class="user-goal">Target: AIR &lt; 100</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay-el" aria-hidden="true"></div>
+
+    <!-- App Main Layout area (Topbar + Contents) -->
+    <div class="app-main">
+
+        <!-- Sticky Top Action Bar -->
+        <header class="app-topbar">
+            <!-- Sidebar toggle menu (Hamburger button) -->
+            <button class="topbar-toggle" id="sidebar-toggle-btn" aria-label="Toggle Navigation Menu">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <!-- Search bar on desktop -->
+            <div class="topbar-search" id="desktop-search-widget">
+                <i data-lucide="search"></i>
+                <input type="text" id="subject-search" class="topbar-search-input"
+                    placeholder="Search subject (e.g. coa, os, network)..." aria-label="Search and filter subjects">
+            </div>
+
+            <!-- Clock calendar widgets -->
+            <div class="topbar-widgets">
+                <div class="topbar-clock" id="header-clock-widget">
+                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
+                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Wrapper -->
+        <main class="content-wrapper">
+
+            <!-- Mobile-only search bar element -->
+            <div class="mobile-search-container" id="mobile-search-widget">
+                <div class="topbar-search">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="subject-search-mobile" class="topbar-search-input"
+                        placeholder="Search subject (e.g. coa, os, network)..." aria-label="Search and filter subjects">
+                </div>
+            </div>
+
+            <div class="dashboard-wrapper">
+
+                <!-- Page Title -->
+                <div class="dashboard-header-block">
+                    <div class="dashboard-title-area">
+                        <h2>Workspace Overview</h2>
+                        <p>Welcome back! Let's conquer today's study goals.</p>
+                    </div>
+                </div>
+
+                <!-- Hero Section: Overall Progress gauge + Stats matrix -->
+                <section class="hero-section" aria-label="Preparation Stats Matrix">
+
+                    <!-- Circular Overall Progress widget -->
+                    <div class="glass-panel overall-progress-card">
+                        <h2 class="card-title">
+                            <i data-lucide="pie-chart"></i>
+                            Overall Progress
+                        </h2>
+
+                        <div class="progress-chart-container">
+                            <canvas id="overallProgressChart"></canvas>
+                            <div class="progress-chart-text">
+                                <span class="progress-pct-val" id="overall-progress-val">0%</span>
+                                <span class="progress-pct-lbl">Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="overall-progress-meta" id="overall-progress-meta-text">
+                            You've solved <strong>0</strong> of <strong>740</strong> total curriculum lectures.
+                        </div>
+                    </div>
+
+                    <!-- 2x4 Grid Stats boxes -->
+                    <div class="glass-panel stats-grid-card">
+
+                        <!-- Row 1: Subjects stats + Streak -->
+                        <div class="stat-box subjects">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-total-subjects">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="book-open"></i></div>
+                            </div>
+                            <span class="stat-label">Total Subjects</span>
+                        </div>
+
+                        <div class="stat-box completed">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-completed-subjects">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="check-square"></i></div>
+                            </div>
+                            <span class="stat-label">Completed Subjects</span>
+                        </div>
+
+                        <div class="stat-box remaining-subjects">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-remaining-subjects">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="book"></i></div>
+                            </div>
+                            <span class="stat-label">Remaining Subjects</span>
+                        </div>
+
+                        <div class="stat-box streak" data-tooltip="Complete daily targets to maintain your streak!">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="streak-val">12</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="flame"></i></div>
+                            </div>
+                            <span class="stat-label">Study Streak</span>
+                        </div>
+
+                        <!-- Row 2: Tasks stats + Completion Date -->
+                        <div class="stat-box tasks">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-total-tasks">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="check-circle-2"></i></div>
+                            </div>
+                            <span class="stat-label">Total Tasks</span>
+                        </div>
+
+                        <div class="stat-box completed">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-completed-tasks">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="check-check"></i></div>
+                            </div>
+                            <span class="stat-label">Completed Tasks</span>
+                        </div>
+
+                        <div class="stat-box tasks">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="stat-remaining-tasks">0</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="clock"></i></div>
+                            </div>
+                            <span class="stat-label">Remaining Tasks</span>
+                        </div>
+
+                        <div class="stat-box est" data-tooltip="Estimated based on task velocity">
+                            <div class="stat-num-container">
+                                <span class="stat-num" id="est-completion-val">Nov 30</span>
+                                <div class="stat-icon-wrapper"><i data-lucide="calendar"></i></div>
+                            </div>
+                            <span class="stat-label">Est. Completion</span>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+                <!-- SECTION 3: SUBJECT CARD GRID -->
+                <section aria-labelledby="subjects-grid-heading">
+                    <div class="grid-header">
+                        <h2 class="grid-title" id="subjects-grid-heading">Syllabus Subjects</h2>
+                    </div>
+                    <div class="subject-grid" id="subject-grid">
+                        <!-- Loaded dynamically via dashboard.js -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

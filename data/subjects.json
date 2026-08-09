@@ -1,0 +1,95 @@
+[
+  {
+    "id": "coa",
+    "name": "Computer Organization & Architecture",
+    "icon": "cpu",
+    "accent": "purple",
+    "totalTasks": 72,
+    "hasPlanner": true,
+    "plannerUrl": "subjects/coa/index.html"
+  },
+  {
+    "id": "os",
+    "name": "Operating System",
+    "icon": "terminal",
+    "accent": "blue",
+    "totalTasks": 0
+  },
+  {
+    "id": "dbms",
+    "name": "DBMS",
+    "icon": "database",
+    "accent": "cyan",
+    "totalTasks": 0
+  },
+  {
+    "id": "cn",
+    "name": "Computer Networks",
+    "icon": "globe",
+    "accent": "emerald",
+    "totalTasks": 0
+  },
+  {
+    "id": "data-structures",
+    "name": "Data Structures",
+    "icon": "layers",
+    "accent": "indigo",
+    "totalTasks": 0
+  },
+  {
+    "id": "algorithms",
+    "name": "Algorithms",
+    "icon": "git-branch",
+    "accent": "violet",
+    "totalTasks": 0
+  },
+  {
+    "id": "toc",
+    "name": "Theory of Computation",
+    "icon": "settings",
+    "accent": "teal",
+    "totalTasks": 0
+  },
+  {
+    "id": "compiler",
+    "name": "Compiler Design",
+    "icon": "code-2",
+    "accent": "rose",
+    "totalTasks": 0
+  },
+  {
+    "id": "digital-logic",
+    "name": "Digital Logic",
+    "icon": "binary",
+    "accent": "amber",
+    "totalTasks": 0
+  },
+  {
+    "id": "engineering-mathematics",
+    "name": "Engineering Mathematics",
+    "icon": "calculator",
+    "accent": "orange",
+    "totalTasks": 0
+  },
+  {
+    "id": "discrete-mathematics",
+    "name": "Discrete Mathematics",
+    "icon": "hash",
+    "accent": "pink",
+    "totalTasks": 0
+  },
+  {
+    "id": "c-programming",
+    "name": "C Programming",
+    "icon": "file-code",
+    "accent": "sky",
+    "totalTasks": 0
+  },
+  {
+    "id": "aptitude",
+    "name": "General Aptitude",
+    "icon": "lightbulb",
+    "accent": "green",
+    "totalTasks": 0
+  }
+]
