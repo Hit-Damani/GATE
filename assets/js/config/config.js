@@ -19,7 +19,7 @@ window.GATE_CONSTANTS = Object.freeze({
     VALIDATION: {
         MIN_PASSWORD_LENGTH: 8,
         MAX_DISPLAY_NAME_LENGTH: 50,
-        EMAIL_REGEX: /^[^s@]+@[^s@]+.[^s@]+$/
+        EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     },
     ERRORS: {
         INVALID_CREDENTIALS: 'Invalid email or password. Please try again.',
