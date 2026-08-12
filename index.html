@@ -110,9 +110,8 @@
 
             <!-- Clock calendar widgets -->
             <div class="topbar-widgets">
-                <div class="topbar-clock" id="header-clock-widget">
-                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
-                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                <div class="topbar-countdown" id="header-countdown-widget" title="Countdown to Est. Completion (15 Dec 2026)">
+                    <span class="countdown-time" id="header-countdown-time">--d --h --m --s</span>
                 </div>
             </div>
         </header>
@@ -208,14 +207,15 @@
 
                         <div class="stat-box est" data-tooltip="Estimated based on task velocity">
                             <div class="stat-num-container">
-                                <span class="stat-num" id="est-completion-val">Nov 30</span>
+                                <span class="stat-num" id="est-completion-val">15 DEC</span>
                                 <div class="stat-icon-wrapper"><i data-lucide="calendar"></i></div>
                             </div>
                             <span class="stat-label">Est. Completion</span>
                         </div>
 
                         <!-- Clickable Activity Stat Box linking to Activity page -->
-                        <a href="activity.html" class="stat-box activity-trigger" id="activity-trigger-box" data-tooltip="Click to view full study calendar">
+                        <a href="activity.html" class="stat-box activity-trigger" id="activity-trigger-box"
+                            data-tooltip="Click to view full study calendar">
                             <div class="stat-num-container">
                                 <span class="stat-num" id="active-days-val">0</span>
                                 <div class="stat-icon-wrapper"><i data-lucide="calendar-days"></i></div>

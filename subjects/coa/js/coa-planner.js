@@ -45,30 +45,12 @@
             renderPlanner();
             renderModal();
             updateProgress();
-            initClock();
         } catch (e) {
             console.error('[COA Planner] Init error:', e);
         } finally {
             window.GateAuthManager.hideLoadingOverlay();
         }
     });
-
-    /* Topbar Live Clock */
-    function initClock() {
-        const tEl = document.getElementById('header-time');
-        const dEl = document.getElementById('header-date');
-        if (!tEl || !dEl) return;
-
-        const tick = () => {
-            const now = new Date();
-            tEl.textContent = window.GateUtils ? window.GateUtils.formatTime(now) : now.toLocaleTimeString();
-            dEl.textContent = window.GateUtils ? window.GateUtils.formatDate(now) : now.toLocaleDateString();
-        };
-        tick();
-        setInterval(tick, 1000);
-    }
-
-    /* Sticky Header Component */
     function renderHeader() {
         const el = document.getElementById('coa-sticky-header');
         if (!el) return;

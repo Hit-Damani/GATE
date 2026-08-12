@@ -28,6 +28,7 @@
     <script src="../../assets/js/core/error-handler.js" defer></script>
     <script src="../../assets/js/core/utils.js" defer></script>
     <script src="../../assets/js/core/storage.js" defer></script>
+    <script src="../../assets/js/core/ui.js" defer></script>
 
     <!-- COA Planner Controller -->
     <script src="js/coa-planner.js" defer></script>
@@ -88,9 +89,8 @@
             </a>
 
             <div class="topbar-widgets">
-                <div class="topbar-clock" id="header-clock-widget">
-                    <span class="clock-time" id="header-time" aria-label="Current Time">00:00:00 AM</span>
-                    <span class="clock-date" id="header-date" aria-label="Current Date">Loading date...</span>
+                <div class="topbar-countdown" id="header-countdown-widget" title="Countdown to Est. Completion (15 Dec 2026)">
+                    <span class="countdown-time" id="header-countdown-time">--d --h --m --s</span>
                 </div>
             </div>
         </header>

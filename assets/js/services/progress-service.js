@@ -15,7 +15,7 @@ window.GateProgressService = {
 
         const estVal = document.getElementById('est-completion-val');
         if (estVal) {
-            estVal.textContent = 'Nov 30';
+            estVal.textContent = '15 DEC';
         }
 
         if (animate && window.GateUtils) {
