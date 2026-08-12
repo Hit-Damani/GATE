@@ -18,12 +18,10 @@ window.GateAuthService = {
                 }
             });
 
-            // Ensure profile and streaks are created immediately if session exists
+            // Ensure profile is created immediately if session exists
             if (!error && data?.user && data?.session) {
-                await Promise.all([
-                    GateSupabase.client.from('profiles').upsert({ id: data.user.id, email: email, display_name: name }, { onConflict: 'id' }),
-                    GateSupabase.client.from('user_streaks').upsert({ user_id: data.user.id }, { onConflict: 'user_id' })
-                ]).catch(err => console.warn('[AuthService] Client-side auto-profile creation notice:', err));
+                await GateSupabase.client.from('profiles').upsert({ id: data.user.id, email: email, display_name: name }, { onConflict: 'id' })
+                    .catch(err => console.warn('[AuthService] Client-side auto-profile creation notice:', err));
             }
 
             return { data, error };

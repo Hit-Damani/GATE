@@ -11,7 +11,6 @@ A premium, high-performance, cloud-synchronized personal productivity dashboard 
   - **Syllabus Doughnut**: Circular representation of overall curriculum completion.
   - **Subject Breakdown Chart**: Horizontal bar chart reflecting progress across all subjects in matching theme color codes.
   - **Study Velocity Tracker**: Weekly chart displaying task completion rates.
-- **Dynamic Streak Calculation**: Automatic study streak validation that checks actual planner completion dates against your schedule to calculate consecutive study days.
 - **Supabase Cloud Sync & Core Auth**: Integrates user registrations/sessions via Supabase Auth and database operations (PostgreSQL) for progress and telemetry persistence across multiple devices.
 - **Highly Responsive Mobile Layouts**: Custom mobile media queries tailored for simulated smartphone viewports (e.g. Samsung Galaxy S8+ at 360px wide) featuring wrapped task titles, stacked controls, and a responsive tab grid.
 
@@ -123,14 +122,7 @@ Tracks lecture-level completed items and dates:
 - `completed_at` (timestamp with time zone)
 - `completed_date` (date) - Clean date in `YYYY-MM-DD` format (powers the study calendar)
 
-### 4. User Streaks (`user_streaks`)
-Stores continuous streak levels:
-- `user_id` (uuid, primary key) - References `auth.users`
-- `current_streak` (integer) - Number of consecutive study days
-- `best_streak` (integer) - Max consecutive study days achieved
-- `last_active_date` (date) - Date of the last completed study task
-
-### 5. Client LocalStorage Cache
+### 4. Client LocalStorage Cache
 Only the following lightweight state is stored locally:
 - `gate_2027_last_active` (text) - Stores the ID of the last visited subject (e.g. `"os"`) to power the "Continue Last Subject" button.
 

@@ -1,6 +1,6 @@
 /**
  * GATE 2027 Core Storage & Profile Engine
- * Handles user progress, streaks, task completions, and profiles backed by Supabase.
+ * Handles user progress, task completions, and profiles backed by Supabase.
  */
 
 // 1. Storage & Progress Aggregator
@@ -8,7 +8,6 @@ window.GateStorage = {
     _userId: null,
     _cache: {
         progress: {},
-        streak: null,
         completions: {},
         profile: null
     },
@@ -22,7 +21,7 @@ window.GateStorage = {
         this._userId = userId;
 
         try {
-            // Lightweight init for subject page (skips profile & streak queries)
+            // Lightweight init for subject page (skips profile queries)
             if (options.isSubjectPage) {
                 const [progressRes, completionsRes] = await Promise.all([
                     GateSupabase.client.from('subject_progress').select('*').eq('user_id', userId),
@@ -133,7 +132,6 @@ window.GateStorage = {
         }
 
         this._cache.progress[subjectId] = progressData;
-        this.updateStreak();
 
         return {
             completedTasks: comp,
@@ -188,69 +186,6 @@ window.GateStorage = {
         }
 
         return activityMap;
-    },
-
-    getStreakData() {
-        const streak = this._cache.streak;
-        if (streak) {
-            return {
-                currentStreak: Number(streak.current_streak) || 0,
-                bestStreak: Number(streak.best_streak) || 0,
-                lastActiveDate: streak.last_active_date || null
-            };
-        }
-        return { currentStreak: 0, bestStreak: 0, lastActiveDate: null };
-    },
-
-    async updateStreak() {
-        const streak = this._cache.streak || {
-            current_streak: 0,
-            best_streak: 0,
-            last_active_date: null
-        };
-        const today = new Date().toISOString().split('T')[0];
-
-        if (!streak.last_active_date) {
-            streak.current_streak = 1;
-            streak.last_active_date = today;
-        } else if (streak.last_active_date !== today) {
-            const lastDate = new Date(streak.last_active_date);
-            const currDate = new Date(today);
-            const diffTime = Math.abs(currDate - lastDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays === 1) {
-                streak.current_streak += 1;
-            } else if (diffDays > 1) {
-                streak.current_streak = 1;
-            }
-            streak.last_active_date = today;
-        }
-
-        if (streak.current_streak > (streak.best_streak || 0)) {
-            streak.best_streak = streak.current_streak;
-        }
-
-        try {
-            await GateSupabase.client
-                .from('user_streaks')
-                .upsert({
-                    user_id: this._userId,
-                    current_streak: streak.current_streak,
-                    best_streak: streak.best_streak,
-                    last_active_date: streak.last_active_date
-                }, { onConflict: 'user_id' });
-        } catch (err) {
-            console.error('[GateStorage] updateStreak failed:', err);
-        }
-
-        this._cache.streak = streak;
-
-        return {
-            currentStreak: streak.current_streak,
-            bestStreak: streak.best_streak,
-            lastActiveDate: streak.last_active_date
-        };
     },
 
     async completeTask(taskId, subjectId) {

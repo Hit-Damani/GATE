@@ -40,16 +40,6 @@ CREATE TABLE IF NOT EXISTS public.subject_progress (
     UNIQUE (user_id, subject_id)
 );
 
-CREATE TABLE IF NOT EXISTS public.user_streaks (
-    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id          UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
-    current_streak   INTEGER NOT NULL DEFAULT 0,
-    best_streak      INTEGER NOT NULL DEFAULT 0,
-    last_active_date DATE,
-    created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at       TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
 CREATE TABLE IF NOT EXISTS public.task_completions (
     id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id        UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -67,7 +57,6 @@ CREATE TABLE IF NOT EXISTS public.task_completions (
 CREATE TRIGGER tr_profiles_up BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 CREATE TRIGGER tr_subjects_up BEFORE UPDATE ON public.subjects FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 CREATE TRIGGER tr_progress_up BEFORE UPDATE ON public.subject_progress FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER tr_streaks_up BEFORE UPDATE ON public.user_streaks FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 CREATE TRIGGER tr_completions_up BEFORE UPDATE ON public.task_completions FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- Indexes
@@ -78,13 +67,11 @@ CREATE INDEX IF NOT EXISTS idx_completions_user_subject ON public.task_completio
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subject_progress ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.user_streaks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.task_completions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "profiles_user" ON public.profiles FOR ALL USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
 CREATE POLICY "subjects_read" ON public.subjects FOR SELECT TO authenticated USING (true);
 CREATE POLICY "progress_user" ON public.subject_progress FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "streaks_user" ON public.user_streaks FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "completions_user" ON public.task_completions FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- 4. Auto-Create User Data Trigger on Signup
@@ -96,7 +83,6 @@ BEGIN
     VALUES (NEW.id, NEW.email, name_val)
     ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, display_name = EXCLUDED.display_name;
 
-    INSERT INTO public.user_streaks (user_id) VALUES (NEW.id) ON CONFLICT (user_id) DO NOTHING;
     RETURN NEW;
 EXCEPTION WHEN OTHERS THEN RETURN NEW;
 END;
