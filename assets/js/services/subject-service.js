@@ -3,7 +3,7 @@
  */
 
 const FALLBACK_SUBJECTS = [
-    { "id": "coa", "name": "Computer Organization & Architecture", "icon": "cpu", "accent": "purple", "totalTasks": 72, "hasPlanner": true, "plannerUrl": "subjects/coa/index.html" },
+    { "id": "coa", "name": "Computer Organization & Architecture", "icon": "cpu", "accent": "purple", "totalTasks": 56, "hasPlanner": true, "plannerUrl": "subjects/coa/index.html" },
     { "id": "os", "name": "Operating System", "icon": "terminal", "accent": "blue", "totalTasks": 0 },
     { "id": "dbms", "name": "DBMS", "icon": "database", "accent": "cyan", "totalTasks": 0 },
     { "id": "cn", "name": "Computer Networks", "icon": "globe", "accent": "emerald", "totalTasks": 0 },
