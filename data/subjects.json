@@ -4,7 +4,7 @@
     "name": "Computer Organization & Architecture",
     "icon": "cpu",
     "accent": "purple",
-    "totalTasks": 56,
+    "totalTasks": 57,
     "hasPlanner": true,
     "plannerUrl": "subjects/coa/index.html"
   },
