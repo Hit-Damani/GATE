@@ -4,8 +4,8 @@
  */
 
 window.GATE_CONFIG = Object.freeze({
-    SUPABASE_URL: 'https://rjzgghyhqbkgwjfkeqhk.supabase.co',
-    SUPABASE_ANON_KEY: 'sb_publishable__m3UXgPsfg5coTD7eVdDCA_EywWB4cC'
+    SUPABASE_URL: 'https://zfmlckbibsdquunykfwe.supabase.co',
+    SUPABASE_ANON_KEY: 'sb_publishable_YMuOarNnhtpEO0iv0QNaRQ_JKkrYdj9'
 });
 
 window.GATE_CONSTANTS = Object.freeze({
