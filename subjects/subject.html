@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Optimization -->
-    <title>Subject Hub | GATE 2027</title>
-    <meta name="description" content="View notes, formula cards, and practice DPPs for GATE CSE 2027 preparation.">
-    <meta name="keywords" content="GATE 2027, Computer Science, subject notes, DPP, study tracker">
+    <title>Subject Study Planner | GATE 2027</title>
+    <meta name="description"
+        content="Data-driven study planner for GATE CSE 2027. Track daily lectures, DPPs, topic progress, and revisions with glassmorphic aesthetics.">
+    <meta name="keywords" content="GATE 2027, Study Planner, GATE CSE, Lecture Tracker, DPPs, Topic Progress">
     <meta name="author" content="GATE Aspirant">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../assets/css/common.css">
     <link rel="stylesheet" href="../assets/css/auth.css">
-    <link rel="stylesheet" href="../assets/css/components/subjects.css">
     <link rel="stylesheet" href="../assets/css/components/planner.css">
 
     <!-- CDN Libraries -->
@@ -38,13 +38,13 @@
     <script src="../assets/js/app.js" defer></script>
 </head>
 
-<body class="app-layout">
+<body class="app-layout subject-page">
 
-    <!-- Loading Overlay (shown during auth check + data init) -->
+    <!-- Loading Overlay -->
     <div id="app-loading-overlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <span class="loading-text">Loading subject hub...</span>
+            <span class="loading-text">Loading study planner...</span>
         </div>
     </div>
 
@@ -54,16 +54,19 @@
     <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
-    <!-- Ambient Pulsing Background -->
+    <!-- Ambient Dynamic Theme Glow -->
     <div class="bg-canvas" aria-hidden="true"></div>
 
-    <!-- App Main Layout area -->
+    <!-- App Main Layout Area -->
     <div class="app-main">
 
-        <!-- Sticky Top Action Bar -->
+        <!-- Topbar -->
         <header class="app-topbar">
-            <a href="../index.html" class="subject-back-nav" id="back-to-dashboard-btn" aria-label="Back to Dashboard">
-                <i data-lucide="arrow-left"></i>
+            <a href="../index.html" class="subject-back-nav" aria-label="Back to Dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
             </a>
 
             <div class="topbar-widgets">
@@ -73,29 +76,27 @@
             </div>
         </header>
 
-        <!-- Main Body Wrapper -->
+        <!-- Main Content -->
         <main class="content-wrapper">
-            <div class="subject-wrapper">
 
-                <!-- Subject Header Panel -->
-                <section class="subject-header-panel" aria-label="Subject Header Information">
-                    <div class="subject-info-block">
-                        <div class="subject-badge-icon" id="subject-badge-icon">
-                            <i data-lucide="book-open"></i>
-                        </div>
-                        <div class="subject-text-details">
-                            <h1 id="subject-title">Subject Hub</h1>
-                            <p id="subject-description">Loading subject details...</p>
-                        </div>
-                    </div>
-                </section>
+            <!-- Sticky Subject Progress Header -->
+            <section class="subject-sticky-header" id="subject-sticky-header" aria-label="Subject Progress">
+                <!-- Populated dynamically by planner-service.js -->
+            </section>
 
-                <!-- Subject Dynamic Content Container (Notes Grid or Subject Hub Overview) -->
-                <div id="subject-content-container" class="tab-pane">
-                    <!-- Loaded dynamically via assets/js/services/planner-service.js -->
-                </div>
+            <!-- Module Navigation Grid -->
+            <section id="subject-nav-section" class="subject-nav-section" aria-label="Subject Navigation">
+                <!-- Populated dynamically by planner-service.js -->
+            </section>
 
-            </div>
+            <!-- Planner Schedule / Day Cards -->
+            <section id="subject-planner-section" class="subject-planner-section" aria-label="Study Schedule">
+                <!-- Populated dynamically from data/planners/{id}.json by planner-service.js -->
+            </section>
+
+            <!-- Container hook for backward compatibility -->
+            <div id="subject-content-container" style="display: none;"></div>
+
         </main>
     </div>
 

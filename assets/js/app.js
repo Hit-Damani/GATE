@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const isDashboardPage = document.getElementById('subject-grid');
         const isActivityPage = document.getElementById('activity-months-list');
-        const isSubjectPage = document.getElementById('subject-content-container');
+        const isSubjectPage = document.getElementById('subject-content-container') || document.getElementById('subject-planner-section');
 
         // Initialize storage with lightweight or full dataset based on current page
         if (window.GateStorage) {
