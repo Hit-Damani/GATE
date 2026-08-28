@@ -1,0 +1,197 @@
+{
+  "subjectId": "os",
+  "subjectName": "Operating System",
+  "totalDays": 9,
+  "days": [
+    {
+      "id": "os-day-1",
+      "day": 1,
+      "date": "2026-08-29",
+      "dayName": "Saturday",
+      "dateLabel": "29 August",
+      "topics": [
+        {
+          "id": "os-topic-d1-process-mgmt",
+          "name": "Process Management",
+          "tasks": [
+            { "id": "os-d1-t1-l1", "title": "Lecture 1 : Basics of OS", "type": "lecture" },
+            { "id": "os-d1-t1-l2", "title": "Lecture 2 : Process Management (Part-1)", "type": "lecture" },
+            { "id": "os-d1-t1-l3", "title": "Lecture 3 : Process Management (Part-2)", "type": "lecture" },
+            { "id": "os-d1-t1-dpp1", "title": "DPP : Process Management", "type": "dpp" }
+          ]
+        },
+        {
+          "id": "os-topic-d1-cpu-sched",
+          "name": "CPU Scheduling",
+          "tasks": [
+            { "id": "os-d1-t2-l1", "title": "Lecture 1 : FCFS, SJF", "type": "lecture" },
+            { "id": "os-d1-t2-l2", "title": "Lecture 2 : SRTF, HRRN, Priority", "type": "lecture" },
+            { "id": "os-d1-t2-l3", "title": "Lecture 3 : LJT, LRTF, HRRN, Priority Based Algorithm", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-2",
+      "day": 2,
+      "date": "2026-08-30",
+      "dayName": "Sunday",
+      "dateLabel": "30 August",
+      "topics": [
+        {
+          "id": "os-topic-d2-cpu-sched",
+          "name": "CPU Scheduling",
+          "tasks": [
+            { "id": "os-d2-t1-l4", "title": "Lecture 4 : RR, MLQ, MLFQ", "type": "lecture" },
+            { "id": "os-d2-t1-l5", "title": "Lecture 5 : CPU Scheduling Algo Questions and other Details", "type": "lecture" },
+            { "id": "os-d2-t1-l6", "title": "Lecture 6 : Multithreading, System Call and Fork", "type": "lecture" },
+            { "id": "os-d2-t1-dpp1", "title": "DPP : CPU Scheduling", "type": "dpp" }
+          ]
+        },
+        {
+          "id": "os-topic-d2-proc-sync",
+          "name": "Process Synchronization",
+          "tasks": [
+            { "id": "os-d2-t2-l1", "title": "Lecture 1 : System Call, Process Synchronization", "type": "lecture" },
+            { "id": "os-d2-t2-l2", "title": "Lecture 2 : Process Synchronization solution", "type": "lecture" },
+            { "id": "os-d2-t2-l3", "title": "Lecture 3 : Process Synchronization Solution (part 2)", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-3",
+      "day": 3,
+      "date": "2026-08-31",
+      "dayName": "Monday",
+      "dateLabel": "31 August",
+      "topics": [
+        {
+          "id": "os-topic-d3-proc-sync",
+          "name": "Process Synchronization",
+          "tasks": [
+            { "id": "os-d3-t1-l4", "title": "Lecture 4 : Synchronization Hardware", "type": "lecture" },
+            { "id": "os-d3-t1-l5", "title": "Lecture 5 : Semaphore", "type": "lecture" },
+            { "id": "os-d3-t1-l6", "title": "Lecture 6 : Semaphore & Classical Synchronization Problems", "type": "lecture" },
+            { "id": "os-d3-t1-l7", "title": "Lecture 7 : Classical Sync Problems", "type": "lecture" },
+            { "id": "os-d3-t1-dpp1", "title": "DPP : Process Synchronization", "type": "dpp" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-4",
+      "day": 4,
+      "date": "2026-09-01",
+      "dayName": "Tuesday",
+      "dateLabel": "1 September",
+      "topics": [
+        {
+          "id": "os-topic-d4-deadlock",
+          "name": "Deadlock",
+          "tasks": [
+            { "id": "os-d4-t1-l1", "title": "Lecture 1 : Deadlock & Deadlock Prevention", "type": "lecture" },
+            { "id": "os-d4-t1-l2", "title": "Lecture 2 : Deadlock Prevention (Part 2) & Avoidance", "type": "lecture" },
+            { "id": "os-d4-t1-l3", "title": "Lecture 3 : Deadlock Avoidance (Part 2) & Banker's Algorithm", "type": "lecture" },
+            { "id": "os-d4-t1-l4", "title": "Lecture 4 : Deadlock Detection", "type": "lecture" },
+            { "id": "os-d4-t1-dpp1", "title": "DPP : Deadlock", "type": "dpp" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-5",
+      "day": 5,
+      "date": "2026-09-02",
+      "dayName": "Wednesday",
+      "dateLabel": "2 September",
+      "topics": [
+        {
+          "id": "os-topic-d5-mem-mgmt",
+          "name": "Memory Management",
+          "tasks": [
+            { "id": "os-d5-t1-l1", "title": "Lecture 1 : Memory Management Contiguous", "type": "lecture" },
+            { "id": "os-d5-t1-l2", "title": "Lecture 2 : Paging and Address Translation", "type": "lecture" },
+            { "id": "os-d5-t1-l3", "title": "Lecture 3 : Address Translation (Part 2) & Paging Performance", "type": "lecture" },
+            { "id": "os-d5-t1-l4", "title": "Lecture 4 : Paging Performance (Part 2) & TLB", "type": "lecture" },
+            { "id": "os-d5-t1-l5", "title": "Lecture 5 : TLB Mapping and Segmentation", "type": "lecture" },
+            { "id": "os-d5-t1-dpp1", "title": "DPP : Memory Management", "type": "dpp" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-6",
+      "day": 6,
+      "date": "2026-09-03",
+      "dayName": "Thursday",
+      "dateLabel": "3 September",
+      "topics": [
+        {
+          "id": "os-topic-d6-virtual-mem",
+          "name": "Virtual Memory",
+          "tasks": [
+            { "id": "os-d6-t1-l1", "title": "Lecture 1 : Virtual Memory", "type": "lecture" },
+            { "id": "os-d6-t1-l2", "title": "Lecture 2 : Virtual Memory (Part 2)", "type": "lecture" },
+            { "id": "os-d6-t1-l3", "title": "Lecture 3 : Page Fault & Page Replacement", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-7",
+      "day": 7,
+      "date": "2026-09-04",
+      "dayName": "Friday",
+      "dateLabel": "4 September",
+      "topics": [
+        {
+          "id": "os-topic-d7-virtual-mem",
+          "name": "Virtual Memory",
+          "tasks": [
+            { "id": "os-d7-t1-l4", "title": "Lecture 4 : Frame Allocation and Multilevel Paging", "type": "lecture" },
+            { "id": "os-d7-t1-l5", "title": "Lecture 5 : Multilevel Paging, Inverted and Hashed Page Table", "type": "lecture" },
+            { "id": "os-d7-t1-l6", "title": "Lecture 6 : Effective Memory Access Time in Multilevel Paging", "type": "lecture" },
+            { "id": "os-d7-t1-dpp1", "title": "DPP : Virtual Memory", "type": "dpp" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-8",
+      "day": 8,
+      "date": "2026-09-05",
+      "dayName": "Saturday",
+      "dateLabel": "5 September",
+      "topics": [
+        {
+          "id": "os-topic-d8-file-sys",
+          "name": "File System",
+          "tasks": [
+            { "id": "os-d8-t1-l1", "title": "Lecture 1 : File System & Disk Blocks", "type": "lecture" },
+            { "id": "os-d8-t1-l2", "title": "Lecture 2 : File Allocation", "type": "lecture" },
+            { "id": "os-d8-t1-l3", "title": "Lecture 3 : Disk Scheduling", "type": "lecture" },
+            { "id": "os-d8-t1-dpp1", "title": "DPP : File System & Disk Scheduling", "type": "dpp" },
+            { "id": "os-d8-t1-pending", "title": "Complete Pending OS Work & Practice", "type": "revision" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-9",
+      "day": 9,
+      "date": "2026-09-06",
+      "dayName": "Sunday",
+      "dateLabel": "6 September",
+      "topics": [
+        {
+          "id": "os-topic-d9-pending",
+          "name": "Pending Work & Revision",
+          "tasks": [
+            { "id": "os-d9-t1-pending", "title": "Complete Pending OS Work & Practice", "type": "revision" }
+          ]
+        }
+      ]
+    }
+  ]
+}
