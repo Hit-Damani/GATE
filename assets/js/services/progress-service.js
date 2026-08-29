@@ -93,21 +93,21 @@ window.GateProgressService = {
                     <span class="month-active-badge">${activeDaysCount} Active Day${activeDaysCount === 1 ? '' : 's'}</span>
                 </div>
                 <div class="month-calendar-grid">
+                    <span class="cal-day-header">Sun</span>
                     <span class="cal-day-header">Mon</span>
                     <span class="cal-day-header">Tue</span>
                     <span class="cal-day-header">Wed</span>
                     <span class="cal-day-header">Thu</span>
                     <span class="cal-day-header">Fri</span>
                     <span class="cal-day-header">Sat</span>
-                    <span class="cal-day-header">Sun</span>
                 </div>
             `;
 
             const grid = card.querySelector('.month-calendar-grid');
 
-            let startDay = (year === 2026 && month === 8) ? 29 : 1;
+            let startDay = (year === 2026 && month === 8) ? 30 : 1;
             const firstDay = new Date(year, month - 1, startDay).getDay();
-            const offset = firstDay === 0 ? 7 : firstDay;
+            const offset = firstDay + 1;
             const daysInMonth = new Date(year, month, 0).getDate();
 
             // Day cells: render ONLY the clean day number inside the box
