@@ -51,13 +51,13 @@ window.GateProgressService = {
 
         const today = new Date();
         const startYear = 2026;
-        const startMonth = 8; // August (1-indexed, starting August 2026)
+        const startMonth = 9; // September (1-indexed, starting September 2026)
 
         // End month calculation: at least December of startYear, or current month if later
         let endYear = Math.max(startYear, today.getFullYear());
         let endMonth = (endYear === startYear) ? 12 : (today.getMonth() + 1);
 
-        // Build array of { year, month } starting from August 2026
+        // Build array of { year, month } starting from September 2026
         const monthList = [];
         let y = startYear;
         let m = startMonth;
@@ -105,16 +105,15 @@ window.GateProgressService = {
 
             const grid = card.querySelector('.month-calendar-grid');
 
-            let startDay = (year === 2026 && month === 8) ? 31 : 1;
-            const firstDay = new Date(year, month - 1, startDay).getDay();
+            const firstDay = new Date(year, month - 1, 1).getDay();
             const offset = ((firstDay + 6) % 7) + 1;
             const daysInMonth = new Date(year, month, 0).getDate();
 
             // Day cells: render ONLY the clean day number inside the box
-            for (let day = startDay; day <= daysInMonth; day++) {
+            for (let day = 1; day <= daysInMonth; day++) {
                 const cell = document.createElement('span');
                 cell.className = 'cal-day';
-                if (day === startDay) {
+                if (day === 1) {
                     cell.style.gridColumnStart = offset;
                 }
 
