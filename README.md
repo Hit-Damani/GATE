@@ -143,4 +143,3 @@ Only the following lightweight state is stored locally:
 1. Clone or download this project repository.
 2. Open `index.html` in any modern web browser.
 3. Choose a subject card (e.g., **Operating System**) to navigate to its study hub and access notes, DPPs, and study resources!
-
