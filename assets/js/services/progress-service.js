@@ -105,15 +105,17 @@ window.GateProgressService = {
 
             const grid = card.querySelector('.month-calendar-grid');
 
-            const firstDay = new Date(year, month - 1, 1).getDay();
-            const offset = ((firstDay + 6) % 7) + 1;
+            const startDay = (year === 2026 && month === 9) ? 2 : 1;
+            const firstDateObj = new Date(year, month - 1, startDay);
+            const firstDayOfWeek = firstDateObj.getDay();
+            const offset = ((firstDayOfWeek + 6) % 7) + 1;
             const daysInMonth = new Date(year, month, 0).getDate();
 
             // Day cells: render ONLY the clean day number inside the box
-            for (let day = 1; day <= daysInMonth; day++) {
+            for (let day = startDay; day <= daysInMonth; day++) {
                 const cell = document.createElement('span');
                 cell.className = 'cal-day';
-                if (day === 1) {
+                if (day === startDay) {
                     cell.style.gridColumnStart = offset;
                 }
 
