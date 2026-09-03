@@ -105,7 +105,7 @@ window.GateProgressService = {
 
             const grid = card.querySelector('.month-calendar-grid');
 
-            const startDay = (year === 2026 && month === 9) ? 2 : 1;
+            const startDay = (year === 2026 && month === 9) ? 3 : 1;
             const firstDateObj = new Date(year, month - 1, startDay);
             const firstDayOfWeek = firstDateObj.getDay();
             const offset = ((firstDayOfWeek + 6) % 7) + 1;
