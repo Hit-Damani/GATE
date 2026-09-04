@@ -1,14 +1,14 @@
 {
   "subjectId": "os",
   "subjectName": "Operating System",
-  "totalDays": 4,
+  "totalDays": 5,
   "days": [
     {
       "id": "os-day-1",
       "day": 1,
-      "date": "2026-09-04",
-      "dayName": "Friday",
-      "dateLabel": "4 September",
+      "date": "2026-09-05",
+      "dayName": "Saturday",
+      "dateLabel": "5 September",
       "topics": [
         {
           "id": "os-topic-d1-process-mgmt",
@@ -52,9 +52,9 @@
     {
       "id": "os-day-2",
       "day": 2,
-      "date": "2026-09-05",
-      "dayName": "Saturday",
-      "dateLabel": "5 September",
+      "date": "2026-09-06",
+      "dayName": "Sunday",
+      "dateLabel": "6 September",
       "topics": [
         {
           "id": "os-topic-d2-deadlock",
@@ -84,9 +84,9 @@
     {
       "id": "os-day-3",
       "day": 3,
-      "date": "2026-09-06",
-      "dayName": "Sunday",
-      "dateLabel": "6 September",
+      "date": "2026-09-07",
+      "dayName": "Monday",
+      "dateLabel": "7 September",
       "topics": [
         {
           "id": "os-topic-d3-virtual-mem",
@@ -94,11 +94,7 @@
           "tasks": [
             { "id": "os-d3-t1-l1", "title": "Lecture 1 : Virtual Memory", "type": "lecture" },
             { "id": "os-d3-t1-l2", "title": "Lecture 2 : Virtual Memory (Part 2)", "type": "lecture" },
-            { "id": "os-d3-t1-l3", "title": "Lecture 3 : Page Fault & Page Replacement", "type": "lecture" },
-            { "id": "os-d3-t1-l4", "title": "Lecture 4 : Frame Allocation and Multilevel Paging", "type": "lecture" },
-            { "id": "os-d3-t1-l5", "title": "Lecture 5 : Multilevel Paging, Inverted and Hashed Page Table", "type": "lecture" },
-            { "id": "os-d3-t1-l6", "title": "Lecture 6 : Effective Memory Access Time in Multilevel Paging", "type": "lecture" },
-            { "id": "os-d3-t1-dpp1", "title": "DPP : Virtual Memory", "type": "dpp" }
+            { "id": "os-d3-t1-l3", "title": "Lecture 3 : Page Fault & Page Replacement", "type": "lecture" }
           ]
         }
       ]
@@ -106,18 +102,37 @@
     {
       "id": "os-day-4",
       "day": 4,
-      "date": "2026-09-07",
-      "dayName": "Monday",
-      "dateLabel": "7 September",
+      "date": "2026-09-08",
+      "dayName": "Tuesday",
+      "dateLabel": "8 September",
       "topics": [
         {
-          "id": "os-topic-d4-file-sys",
+          "id": "os-topic-d4-virtual-mem",
+          "name": "Virtual Memory",
+          "tasks": [
+            { "id": "os-d4-t1-l4", "title": "Lecture 4 : Frame Allocation and Multilevel Paging", "type": "lecture" },
+            { "id": "os-d4-t1-l5", "title": "Lecture 5 : Multilevel Paging, Inverted and Hashed Page Table", "type": "lecture" },
+            { "id": "os-d4-t1-l6", "title": "Lecture 6 : Effective Memory Access Time in Multilevel Paging", "type": "lecture" },
+            { "id": "os-d4-t1-dpp1", "title": "DPP : Virtual Memory", "type": "dpp" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "os-day-5",
+      "day": 5,
+      "date": "2026-09-09",
+      "dayName": "Wednesday",
+      "dateLabel": "9 September",
+      "topics": [
+        {
+          "id": "os-topic-d5-file-sys",
           "name": "File System",
           "tasks": [
-            { "id": "os-d4-t1-l1", "title": "Lecture 1 : File System & Disk Blocks", "type": "lecture" },
-            { "id": "os-d4-t1-l2", "title": "Lecture 2 : File Allocation", "type": "lecture" },
-            { "id": "os-d4-t1-l3", "title": "Lecture 3 : Disk Scheduling", "type": "lecture" },
-            { "id": "os-d4-t1-dpp1", "title": "DPP : File System & Disk Scheduling", "type": "dpp" }
+            { "id": "os-d5-t1-l1", "title": "Lecture 1 : File System & Disk Blocks", "type": "lecture" },
+            { "id": "os-d5-t1-l2", "title": "Lecture 2 : File Allocation", "type": "lecture" },
+            { "id": "os-d5-t1-l3", "title": "Lecture 3 : Disk Scheduling", "type": "lecture" },
+            { "id": "os-d5-t1-dpp1", "title": "DPP : File System & Disk Scheduling", "type": "dpp" }
           ]
         }
       ]
