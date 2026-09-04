@@ -9,7 +9,8 @@ window.GateStorage = {
     _cache: {
         progress: {},
         completions: {},
-        profile: null
+        profile: null,
+        sessions: []
     },
     _initialized: false,
 
@@ -48,12 +49,25 @@ window.GateStorage = {
                 return;
             }
 
-            // Full init for dashboard (includes progress, task completions & profile)
-            const [progressRes, completionsRes, profileRes] = await Promise.all([
+            // Full init for dashboard & timer (includes progress, task completions, profile, and study sessions)
+            const [progressRes, completionsRes, profileRes, sessionsRes] = await Promise.all([
                 GateSupabase.client.from('subject_progress').select('*').eq('user_id', userId),
                 GateSupabase.client.from('task_completions').select('task_id, subject_id').eq('user_id', userId),
-                GateSupabase.client.from('profiles').select('*').eq('id', userId).maybeSingle()
+                GateSupabase.client.from('profiles').select('*').eq('id', userId).maybeSingle(),
+                GateSupabase.client.from('study_sessions').select('*').eq('user_id', userId).order('created_at', { ascending: false })
             ]);
+
+            // Cache study sessions (Supabase primary, localStorage fallback)
+            if (sessionsRes?.data && sessionsRes.data.length > 0) {
+                this._cache.sessions = sessionsRes.data;
+            } else {
+                try {
+                    const local = localStorage.getItem('gate_study_sessions_' + userId);
+                    this._cache.sessions = local ? JSON.parse(local) : [];
+                } catch (e) {
+                    this._cache.sessions = [];
+                }
+            }
 
             // Cache progress indexed by subject_id
             this._cache.progress = {};
@@ -178,9 +192,25 @@ window.GateStorage = {
             if (data) {
                 data.forEach(row => {
                     const day = new Date(row.completed_date).getDate();
-                    activityMap.set(day, (activityMap.get(day) || 0) + 1);
+                    const existing = activityMap.get(day);
+                    const taskCount = (typeof existing === 'object' ? existing.tasks : (Number(existing) || 0)) + 1;
+                    const mins = typeof existing === 'object' ? existing.minutes : 0;
+                    activityMap.set(day, { tasks: taskCount, minutes: mins });
                 });
             }
+
+            const sessions = this._cache.sessions || [];
+            sessions.forEach(s => {
+                if (s.session_date) {
+                    const [sY, sM, sD] = s.session_date.split('-').map(Number);
+                    if (sY === year && sM === month) {
+                        const existing = activityMap.get(sD);
+                        const taskCount = typeof existing === 'object' ? existing.tasks : (Number(existing) || 0);
+                        const mins = (typeof existing === 'object' ? existing.minutes : 0) + (Number(s.duration_minutes) || 0);
+                        activityMap.set(sD, { tasks: taskCount, minutes: mins });
+                    }
+                }
+            });
         } catch (err) {
             console.error('[GateStorage] getActivityDates failed:', err);
         }
@@ -249,6 +279,67 @@ window.GateStorage = {
     getCompletedTaskCount(subjectId) {
         const completions = this._cache.completions[subjectId];
         return completions ? completions.size : 0;
+    },
+
+    async saveStudySession(subjectId, durationMinutes, sessionType = 'pomodoro') {
+        const duration = Math.max(1, Math.round(Number(durationMinutes) || 1));
+        const record = {
+            user_id: this._userId,
+            subject_id: subjectId || null,
+            duration_minutes: duration,
+            session_date: new Date().toISOString().split('T')[0],
+            session_type: sessionType
+        };
+
+        try {
+            const { data } = await GateSupabase.client
+                .from('study_sessions')
+                .insert(record)
+                .select()
+                .maybeSingle();
+
+            const saved = data || { ...record, id: 'local-' + Date.now(), created_at: new Date().toISOString() };
+            this._cache.sessions.unshift(saved);
+        } catch (err) {
+            this._cache.sessions.unshift({ ...record, id: 'local-' + Date.now(), created_at: new Date().toISOString() });
+        }
+
+        try {
+            localStorage.setItem('gate_study_sessions_' + this._userId, JSON.stringify(this._cache.sessions));
+        } catch (e) {}
+
+        return true;
+    },
+
+    getDeepWorkStats() {
+        const sessions = this._cache.sessions || [];
+        const today = new Date().toISOString().split('T')[0];
+
+        let totalMinutes = 0;
+        let todayMinutes = 0;
+
+        sessions.forEach(s => {
+            const mins = Number(s.duration_minutes) || 0;
+            totalMinutes += mins;
+            if (s.session_date === today) {
+                todayMinutes += mins;
+            }
+        });
+
+        const totalHours = (totalMinutes / 60).toFixed(1);
+        const todayHours = (todayMinutes / 60).toFixed(1);
+
+        return {
+            totalMinutes,
+            totalHours,
+            todayMinutes,
+            todayHours,
+            sessionCount: sessions.length
+        };
+    },
+
+    getStudySessions() {
+        return this._cache.sessions || [];
     }
 };
 

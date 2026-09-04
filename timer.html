@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Focus Studio — GATE 2027</title>
+    <meta name="description" content="Immersive Pomodoro and Deep Work focus timer tailored for GATE 2027 preparation.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="assets/css/components/dashboard.css">
+    <link rel="stylesheet" href="assets/css/components/timer.css">
+
+    <!-- CDN Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Config & Core -->
+    <script src="assets/js/config/config.js" defer></script>
+    <script src="assets/js/core/auth.js" defer></script>
+    <script src="assets/js/core/error-handler.js" defer></script>
+    <script src="assets/js/core/utils.js" defer></script>
+    <script src="assets/js/core/storage.js" defer></script>
+    <script src="assets/js/core/ui.js" defer></script>
+
+    <!-- Services -->
+    <script src="assets/js/services/subject-service.js" defer></script>
+    <script src="assets/js/services/timer-service.js" defer></script>
+
+    <!-- Application Entry Point -->
+    <script src="assets/js/app.js" defer></script>
+</head>
+
+<body class="app-layout">
+
+    <!-- Loading Overlay -->
+    <div id="app-loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">Preparing Focus Studio...</span>
+        </div>
+    </div>
+
+    <!-- Offline Banner -->
+    <div id="offline-banner">⚠ You're offline. Some features may be unavailable.</div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Ambient Pulsing Background -->
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" id="app-sidebar-el">
+        <a href="index.html" class="sidebar-brand">
+            <div class="brand-logo">
+                <i data-lucide="target"></i>
+            </div>
+            <span class="brand-name">GATE 2027</span>
+        </a>
+
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="activity.html" class="menu-item">
+                <i data-lucide="calendar-days"></i>
+                <span>Activity</span>
+            </a>
+            <a href="timer.html" class="menu-item active">
+                <i data-lucide="timer"></i>
+                <span>Focus Timer</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar" id="user-avatar-initials" title="Target: All India Rank 100">GA</div>
+            <div class="user-meta">
+                <span class="user-name" id="user-display-name">GATE Aspirant</span>
+                <span class="user-goal" id="user-target-goal">Target: AIR &lt; 100</span>
+            </div>
+        </div>
+        <div style="padding: 0 1.25rem 1.25rem;">
+            <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+                <i data-lucide="log-out"></i>
+                <span>Log out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay-el" aria-hidden="true"></div>
+
+    <!-- Main Content Layout -->
+    <div class="app-main">
+
+        <!-- Top Bar -->
+        <header class="app-topbar">
+            <button class="topbar-toggle" id="sidebar-toggle-btn" aria-label="Toggle Navigation Menu">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <div class="topbar-widgets">
+                <div class="topbar-countdown" id="header-countdown-widget" title="Countdown to Est. Completion (15 Dec 2026)">
+                    <span class="countdown-time" id="header-countdown-time">--d --h --m --s</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Body Content -->
+        <main class="content-wrapper">
+            <!-- Floating Exit Fullscreen Button (Visible in fullscreen mode) -->
+            <button type="button" class="exit-zen-btn" id="exit-zen-btn" title="Exit Fullscreen (Esc)">
+                <i data-lucide="minimize-2"></i>
+                <span>Exit Fullscreen</span>
+            </button>
+
+            <div class="timer-page-wrapper" id="timer-clock-container">
+
+                <!-- Header Block -->
+                <div class="timer-header-block">
+                    <div>
+                        <h1 class="timer-page-title">Deep Focus Studio</h1>
+                        <p class="timer-page-subtitle">Lock in your study zone with cognitive Pomodoro sprints and real-time deep work logging.</p>
+                    </div>
+                    <button type="button" class="zen-mode-toggle-btn" id="zen-mode-toggle" title="Distraction-Free Fullscreen (Press Esc to exit)">
+                        <i data-lucide="maximize-2"></i>
+                        <span>Fullscreen</span>
+                    </button>
+                </div>
+
+                <!-- Clock Dial Hero Card -->
+                <div class="glass-panel timer-hero-card" id="timer-hero-card">
+
+                    <!-- Mode Selectors Bar -->
+                    <div class="timer-mode-pills">
+                        <button type="button" class="timer-mode-pill active" data-mins="25">
+                            <span>25 Minutes</span>
+                        </button>
+                        <button type="button" class="timer-mode-pill" data-mins="50">
+                            <span>50 Minutes</span>
+                        </button>
+                    </div>
+
+                    <!-- Subject Tag Picker -->
+                    <div class="timer-subject-picker-row">
+                        <span class="subject-picker-label">
+                            <i data-lucide="book-open"></i>
+                            <span>Studying:</span>
+                        </span>
+
+                        <!-- Custom Glass Dropdown -->
+                        <div class="custom-subject-dropdown" id="custom-subject-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" id="custom-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="dropdown-selected-dot" id="dropdown-selected-dot"></span>
+                                <span class="dropdown-selected-text" id="dropdown-selected-text">Operating System</span>
+                                <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+                            </button>
+                            <div class="custom-dropdown-menu" id="custom-dropdown-menu" role="listbox"></div>
+                        </div>
+
+                        <!-- Hidden select for compatibility -->
+                        <select id="timer-subject-select" style="display:none;" aria-hidden="true" tabindex="-1">
+                            <option value="os">Operating System</option>
+                        </select>
+                    </div>
+
+                    <!-- Full SVG Circular Clock Dial -->
+                    <div class="timer-dial-wrapper">
+                        <svg class="timer-svg-dial" viewBox="0 0 320 320">
+                            <defs>
+                                <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#a855f7" />
+                                    <stop offset="50%" stop-color="#3b82f6" />
+                                    <stop offset="100%" stop-color="#06b6d4" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Background Track Circle -->
+                            <circle class="timer-circle-track" cx="160" cy="160" r="140" />
+                            <!-- Progress Arc Circle -->
+                            <circle class="timer-circle-progress" id="timer-circle-progress" cx="160" cy="160" r="140" />
+                        </svg>
+
+                        <!-- Dial Center Content -->
+                        <div class="timer-dial-center">
+                            <span class="timer-status-badge ready" id="timer-status-badge">READY TO FOCUS</span>
+                            <div class="timer-digits-display" id="timer-clock-display">25:00</div>
+                            <span class="timer-session-hint" id="timer-clock-subtitle">25-Minute Session</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Action Controls -->
+                    <div class="timer-actions-row">
+                        <button type="button" class="timer-main-btn primary play" id="timer-btn-primary">
+                            <i data-lucide="play" id="timer-primary-icon"></i>
+                            <span id="timer-primary-text">Start</span>
+                        </button>
+                        <button type="button" class="timer-secondary-btn reset" id="timer-btn-reset" title="Reset Session">
+                            <i data-lucide="rotate-ccw"></i>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Deep Work Summary Cards Grid -->
+                <div class="timer-stats-grid">
+                    <div class="glass-panel timer-stat-card">
+                        <div class="stat-num-container">
+                            <span class="timer-stat-num" id="timer-stat-today-hours">0.0h</span>
+                            <div class="timer-stat-icon-wrap purple"><i data-lucide="flame"></i></div>
+                        </div>
+                        <span class="timer-stat-label">Deep Work Today</span>
+                    </div>
+                    <div class="glass-panel timer-stat-card">
+                        <div class="stat-num-container">
+                            <span class="timer-stat-num" id="timer-stat-total-sessions">0</span>
+                            <div class="timer-stat-icon-wrap blue"><i data-lucide="check-circle-2"></i></div>
+                        </div>
+                        <span class="timer-stat-label">Total Sessions</span>
+                    </div>
+                    <div class="glass-panel timer-stat-card">
+                        <div class="stat-num-container">
+                            <span class="timer-stat-num" id="timer-stat-total-hours">0.0h</span>
+                            <div class="timer-stat-icon-wrap cyan"><i data-lucide="clock"></i></div>
+                        </div>
+                        <span class="timer-stat-label">All-Time Hours</span>
+                    </div>
+                </div>
+
+                <!-- Recent Study Sessions Log -->
+                <section class="timer-history-section">
+                    <div class="glass-panel timer-history-card">
+                        <div class="history-card-header">
+                            <div class="history-title-wrap">
+                                <i data-lucide="history"></i>
+                                <h3>Focus Sessions</h3>
+                            </div>
+                            <span class="history-badge" id="history-total-count">0 Sessions</span>
+                        </div>
+                        <div class="history-sessions-list" id="timer-history-list">
+                            <!-- Populated dynamically by timer-service.js -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

@@ -16,7 +16,15 @@ Built with a **zero-framework, lightweight architecture** (HTML5, CSS3, Vanilla 
 - **Interactive Telemetry & Metrics**:
   - **Syllabus Doughnut (Chart.js)**: Circular completion gauge with smooth cubic-bezier percentage rollups.
   - **8-Metric Telemetry Matrix**: Real-time counters for Total/Completed/Remaining Subjects, Total/Completed/Remaining Tasks, Target Completion Date, and Active Days.
-  - **Month-by-Month Activity Heatmap (`activity.html`)**: Visual calendar tracking daily task density (No activity, 1–2 tasks, 3+ tasks) starting from September 2026.
+  - **Month-by-Month Activity Heatmap (`activity.html`)**: Visual calendar tracking daily task density and deep work hours starting from September 2026.
+
+- **Deep Focus Studio (`timer.html`)**:
+  - **Cognitive Pomodoro Engine**: 25-minute and 50-minute structured study sprint modes.
+  - **Circular SVG Countdown Dial**: High-precision SVG ring with ambient radial back-glow, smooth gradient stroke offset, and drift-mitigated `Date.now()` accuracy.
+  - **Live Browser Tab Countdown**: Dynamically updates tab title with real-time remaining minutes and seconds e.g. `(24:59) Focus Studio — GATE 2027`.
+  - **Glassmorphic Subject Picker**: Dropdown menu enabling aspirants to tag focus sessions to any of the 13 GATE CSE subjects.
+  - **Distraction-Free Zen Mode**: Dedicated fullscreen view (toggleable via UI button or `Esc`) that hides sidebars, headers, and UI distractions.
+  - **Cloud Session Persistence**: Automatically persists completed sprints into Supabase `study_sessions` with celebratory toasts, updating Today's Deep Work, Total Sessions, and All-Time study hours.
 
 - **Dynamic Subject Hub & Study Planner (`subjects/subject.html`)**:
   - **Dynamic Theming Engine**: Custom CSS variable engine applying unique accent glows and color palettes for all 13 GATE subjects.
@@ -36,43 +44,6 @@ Built with a **zero-framework, lightweight architecture** (HTML5, CSS3, Vanilla 
 
 ---
 
-## 📊 System Architecture
-
-```mermaid
-graph TD
-    %% Portals
-    subgraph UI_Portals [User Interface Portals]
-        DASH[index.html — Dashboard Portal]
-        ACT[activity.html — Study Activity Calendar]
-        SUB[subjects/subject.html — Dynamic Subject Hub]
-        AUTH_UI[auth/login.html & signup.html — Auth Pages]
-    end
-
-    %% Router & Controller
-    DASH --> APP[assets/js/app.js — Central Router & App Controller]
-    ACT --> APP
-    SUB --> APP
-    
-    %% Core Engines
-    APP --> AUTH[assets/js/core/auth.js — Supabase Auth & Route Guard]
-    APP --> STORE[assets/js/core/storage.js — GateStorage Cache Layer]
-    APP --> UI[assets/js/core/ui.js — Clock, Countdown & Sidebar Drawer]
-    APP --> ERR[assets/js/core/error-handler.js — Toast & Offline Detection]
-    APP --> UTILS[assets/js/core/utils.js — Counter Animations & Helpers]
-
-    %% Service Layer
-    APP --> SUBSVC[assets/js/services/subject-service.js — Subject Cards]
-    APP --> PROGSVC[assets/js/services/progress-service.js — Chart.js & Calendar Engine]
-    APP --> PLANSVC[assets/js/services/planner-service.js — Schedules & Tasks]
-
-    %% Data & Backend
-    STORE <--> SUPA_DB[(Supabase PostgreSQL — RLS Protected)]
-    AUTH <--> SUPA_AUTH[Supabase Auth Engine]
-    STORE -.-> LOCAL[(LocalStorage — Last Active Subject)]
-```
-
----
-
 ## 📁 Directory Structure
 
 ```text
@@ -80,6 +51,7 @@ GATE-2027/
 │
 ├── index.html                      # Central Dashboard Portal (Donut chart & 8-metric matrix)
 ├── activity.html                   # Study Activity & Monthly Calendar Heatmap Portal
+├── timer.html                      # Deep Focus Studio Portal (Pomodoro Timer & Deep Work Matrix)
 ├── README.md                       # Comprehensive Architecture Documentation
 │
 ├── auth/
@@ -103,7 +75,8 @@ GATE-2027/
 │   │       ├── dashboard.css       # Hero Section, Stats Matrix & Doughnut Gauge Styles
 │   │       ├── subjects.css        # Subject Cards Grid & Status Badges
 │   │       ├── planner.css         # Sticky Header, Day Cards, Dynamic Theming & Confetti
-│   │       └── activity.css        # Study Activity Month Cards & Heatmap Grid Styling
+│   │       ├── activity.css        # Study Activity Month Cards & Heatmap Grid Styling
+│   │       └── timer.css           # Dial Hero Card, SVG Circular Dial, Zen Mode & History
 │   │
 │   └── js/
 │       ├── config/
@@ -120,6 +93,7 @@ GATE-2027/
 │       ├── services/
 │       │   ├── subject-service.js  # GateSubjectService (Card Generator & Accent Mapper)
 │       │   ├── progress-service.js # GateProgressService (Chart.js Donut & Activity Calendar)
+│       │   ├── timer-service.js    # GateTimerService (Pomodoro Engine, Dial Animation & Logging)
 │       │   └── planner-service.js  # GatePlannerService (Subject Hub, Day Cards & Confetti)
 │       │
 │       └── app.js                  # Application Controller Entry Point & Route Initializer
@@ -171,9 +145,21 @@ Tracks lecture-level completed items and dates:
 - `completed_date` (DATE) — Date formatted `YYYY-MM-DD` (powers activity heatmaps)
 - `UNIQUE (user_id, task_id)`
 
-### 5. Client LocalStorage Cache
-Lightweight client-only state:
+### 5. Study Sessions (`study_sessions`)
+Logs completed deep work sessions and focus sprints:
+- `id` (UUID, primary key) — Generated via `gen_random_uuid()`
+- `user_id` (UUID, references `auth.users.id`) — Cascades on user deletion
+- `subject_id` (TEXT, references `subjects.id`) — Subject linked to session
+- `duration_minutes` (INTEGER) — Duration in minutes (must be > 0)
+- `session_date` (DATE, default `CURRENT_DATE`) — Date formatted `YYYY-MM-DD` (powers activity calendar)
+- `session_type` (TEXT, default `'pomodoro'`) — Mode classification (`'pomodoro'` or `'stopwatch'`)
+- `created_at` / `updated_at` (TIMESTAMPTZ) — Managed by `set_updated_at()` trigger
+- Index on `(user_id, session_date)` for fast calendar range queries
+
+### 6. Client LocalStorage Cache
+Lightweight client-only state & offline fallback:
 - `gate_2027_last_active` (TEXT) — Tracks the last visited subject (e.g. `'os'`) for quick continuation.
+- `gate_study_sessions_<user_id>` (JSON) — Offline session storage fallback ensuring zero data loss during network interruptions.
 
 ---
 

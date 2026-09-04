@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const isDashboardPage = document.getElementById('subject-grid');
         const isActivityPage = document.getElementById('activity-months-list');
+        const isTimerPage = document.getElementById('timer-clock-container');
         const isSubjectPage = document.getElementById('subject-content-container') || document.getElementById('subject-planner-section');
 
         // Initialize storage with lightweight or full dataset based on current page
@@ -31,6 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             await initDashboardFlow();
         } else if (isActivityPage) {
             await initActivityFlow();
+        } else if (isTimerPage) {
+            await initTimerFlow();
         } else if (isSubjectPage) {
             await initSubjectFlow();
         }
@@ -68,6 +71,23 @@ async function initDashboardFlow() {
 async function initActivityFlow() {
     if (!window.GateProgressService) return;
     await window.GateProgressService.initActivityPage();
+
+    if (window.GateProfileService) {
+        await window.GateProfileService.populateSidebar();
+    }
+
+    const logoutBtn = document.getElementById('sidebar-logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await window.GateAuthManager.logout();
+        });
+    }
+}
+
+async function initTimerFlow() {
+    if (window.GateTimerService) {
+        await window.GateTimerService.init();
+    }
 
     if (window.GateProfileService) {
         await window.GateProfileService.populateSidebar();

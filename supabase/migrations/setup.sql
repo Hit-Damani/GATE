@@ -53,26 +53,59 @@ CREATE TABLE IF NOT EXISTS public.task_completions (
     UNIQUE (user_id, task_id)
 );
 
+CREATE TABLE IF NOT EXISTS public.study_sessions (
+    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id          UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    subject_id       TEXT REFERENCES public.subjects(id),
+    duration_minutes INTEGER NOT NULL CHECK (duration_minutes > 0),
+    session_date     DATE NOT NULL DEFAULT CURRENT_DATE,
+    session_type     TEXT DEFAULT 'pomodoro' CHECK (session_type IN ('pomodoro', 'stopwatch')),
+    created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- Triggers for auto-updated_at
+DROP TRIGGER IF EXISTS tr_profiles_up ON public.profiles;
 CREATE TRIGGER tr_profiles_up BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+DROP TRIGGER IF EXISTS tr_subjects_up ON public.subjects;
 CREATE TRIGGER tr_subjects_up BEFORE UPDATE ON public.subjects FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+DROP TRIGGER IF EXISTS tr_progress_up ON public.subject_progress;
 CREATE TRIGGER tr_progress_up BEFORE UPDATE ON public.subject_progress FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+DROP TRIGGER IF EXISTS tr_completions_up ON public.task_completions;
 CREATE TRIGGER tr_completions_up BEFORE UPDATE ON public.task_completions FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+DROP TRIGGER IF EXISTS tr_sessions_up ON public.study_sessions;
+CREATE TRIGGER tr_sessions_up BEFORE UPDATE ON public.study_sessions FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_progress_user ON public.subject_progress(user_id);
 CREATE INDEX IF NOT EXISTS idx_completions_user_subject ON public.task_completions(user_id, subject_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_user_date ON public.study_sessions(user_id, session_date);
 
 -- 3. Row Level Security Policies
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subject_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.task_completions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.study_sessions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "profiles_user" ON public.profiles;
 CREATE POLICY "profiles_user" ON public.profiles FOR ALL USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+
+DROP POLICY IF EXISTS "subjects_read" ON public.subjects;
 CREATE POLICY "subjects_read" ON public.subjects FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "progress_user" ON public.subject_progress;
 CREATE POLICY "progress_user" ON public.subject_progress FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "completions_user" ON public.task_completions;
 CREATE POLICY "completions_user" ON public.task_completions FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "sessions_user" ON public.study_sessions;
+CREATE POLICY "sessions_user" ON public.study_sessions FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- 4. Auto-Create User Data Trigger on Signup
 CREATE OR REPLACE FUNCTION public.handle_new_user() RETURNS TRIGGER AS $$

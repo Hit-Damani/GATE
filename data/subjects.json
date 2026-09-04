@@ -2,6 +2,7 @@
   {
     "id": "coa",
     "name": "Computer Organization & Architecture",
+    "shortName": "COA",
     "icon": "cpu",
     "accent": "purple",
     "totalTasks": 0

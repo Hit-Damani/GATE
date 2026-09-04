@@ -119,15 +119,25 @@ window.GateProgressService = {
                     cell.style.gridColumnStart = offset;
                 }
 
-                const count = activityMap.get(day) || 0;
+                const dayData = activityMap.get(day);
+                const taskCount = typeof dayData === 'object' ? (dayData.tasks || 0) : (Number(dayData) || 0);
+                const dwMins = typeof dayData === 'object' ? (dayData.minutes || 0) : 0;
+                const dwHours = (dwMins / 60).toFixed(1);
+
                 cell.innerHTML = `<span class="cal-day-num">${day}</span>`;
 
-                if (count >= 3) {
-                    cell.classList.add('active');
-                    cell.title = `${count} tasks completed`;
-                } else if (count >= 1) {
-                    cell.classList.add('light-activity');
-                    cell.title = `${count} task${count > 1 ? 's' : ''} completed`;
+                const monthShort = monthNames[month - 1].slice(0, 3);
+                const parts = [];
+                if (taskCount > 0) parts.push(`${taskCount} task${taskCount > 1 ? 's' : ''} done`);
+                if (dwMins > 0) parts.push(`${dwHours} hrs Deep Work`);
+
+                if (parts.length > 0) {
+                    cell.title = `${day} ${monthShort}: ${parts.join(' • ')}`;
+                    if (taskCount >= 3 || dwMins >= 120) {
+                        cell.classList.add('active');
+                    } else {
+                        cell.classList.add('light-activity');
+                    }
                 }
 
                 if (isCurrent && day === today.getDate()) {
