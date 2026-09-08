@@ -250,12 +250,17 @@ window.GateTimerService = {
     async logSession(minutes) {
         const subId = this.activeSubjectId || 'os';
         const subName = this.getSubjectDisplayName(subId);
+        let ok = true;
         if (window.GateStorage?.saveStudySession) {
-            await window.GateStorage.saveStudySession(subId, minutes, 'pomodoro');
+            ok = await window.GateStorage.saveStudySession(subId, minutes, 'pomodoro');
         }
-        window.GateErrorHandler?.showToast(`🎉 Logged ${minutes}m of deep work for ${subName}!`, 'success', 4000);
-        this.renderStats();
-        this.renderHistory();
+        if (ok) {
+            window.GateErrorHandler?.showToast(`🎉 Logged ${minutes}m of deep work for ${subName}!`, 'success', 4000);
+            this.renderStats();
+            this.renderHistory();
+        } else {
+            window.GateErrorHandler?.showToast('Unable to save your study session. Please try again.', 'error', 4000);
+        }
     },
 
     setBadge(text, cls) {

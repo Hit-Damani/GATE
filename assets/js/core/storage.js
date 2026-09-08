@@ -57,17 +57,8 @@ window.GateStorage = {
                 GateSupabase.client.from('study_sessions').select('*').eq('user_id', userId).order('created_at', { ascending: false })
             ]);
 
-            // Cache study sessions (Supabase primary, localStorage fallback)
-            if (sessionsRes?.data && sessionsRes.data.length > 0) {
-                this._cache.sessions = sessionsRes.data;
-            } else {
-                try {
-                    const local = localStorage.getItem('gate_study_sessions_' + userId);
-                    this._cache.sessions = local ? JSON.parse(local) : [];
-                } catch (e) {
-                    this._cache.sessions = [];
-                }
-            }
+            // Cache study sessions directly from database
+            this._cache.sessions = sessionsRes?.data || [];
 
             // Cache progress indexed by subject_id
             this._cache.progress = {};
@@ -282,33 +273,34 @@ window.GateStorage = {
     },
 
     async saveStudySession(subjectId, durationMinutes, sessionType = 'pomodoro') {
-        const duration = Math.max(1, Math.round(Number(durationMinutes) || 1));
         const record = {
             user_id: this._userId,
             subject_id: subjectId || null,
-            duration_minutes: duration,
+            duration_minutes: Math.max(1, Math.round(Number(durationMinutes) || 1)),
             session_date: new Date().toISOString().split('T')[0],
             session_type: sessionType
         };
 
         try {
-            const { data } = await GateSupabase.client
+            const { data, error } = await GateSupabase.client
                 .from('study_sessions')
                 .insert(record)
                 .select()
                 .maybeSingle();
 
-            const saved = data || { ...record, id: 'local-' + Date.now(), created_at: new Date().toISOString() };
-            this._cache.sessions.unshift(saved);
+            if (error) {
+                console.error('[GateStorage] saveStudySession error:', error);
+                return false;
+            }
+
+            if (data) {
+                this._cache.sessions.unshift(data);
+            }
+            return true;
         } catch (err) {
-            this._cache.sessions.unshift({ ...record, id: 'local-' + Date.now(), created_at: new Date().toISOString() });
+            console.error('[GateStorage] saveStudySession failed:', err);
+            return false;
         }
-
-        try {
-            localStorage.setItem('gate_study_sessions_' + this._userId, JSON.stringify(this._cache.sessions));
-        } catch (e) {}
-
-        return true;
     },
 
     getDeepWorkStats() {
