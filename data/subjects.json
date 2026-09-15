@@ -5,7 +5,7 @@
     "shortName": "COA",
     "icon": "cpu",
     "accent": "purple",
-    "totalTasks": 0
+    "totalTasks": 42
   },
   {
     "id": "os",
