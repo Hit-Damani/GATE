@@ -1,0 +1,123 @@
+{
+  "subjectId": "c-programming",
+  "subjectName": "C Programming",
+  "totalDays": 5,
+  "days": [
+    {
+      "id": "c-day-1",
+      "day": 1,
+      "date": "2026-09-21",
+      "dayName": "Monday",
+      "dateLabel": "21 September",
+      "topics": [
+        {
+          "id": "c-topic-d1-lang-proc",
+          "name": "Language Processor",
+          "tasks": [
+            { "id": "c-d1-t1-l1", "title": "Lecture 1 - Introduction to C Programming (Part -01)", "type": "lecture" },
+            { "id": "c-d1-t1-l2", "title": "Lecture 2 - Introduction to C Programming (Part -02)", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "c-topic-d1-datatypes-operators",
+          "name": "Data Types and Operators",
+          "tasks": [
+            { "id": "c-d1-t2-l1", "title": "Lecture 1 - Data Types (part 01)", "type": "lecture" },
+            { "id": "c-d1-t2-l2", "title": "Lecture 2 - Data Types (part 02)", "type": "lecture" },
+            { "id": "c-d1-t2-l3", "title": "Lecture 3 - Operators (part 01)", "type": "lecture" },
+            { "id": "c-d1-t2-l4", "title": "Lecture 4 - Operators (part 02)", "type": "lecture" },
+            { "id": "c-d1-t2-l5", "title": "Lecture 5 - Operators (part 03)", "type": "lecture" },
+            { "id": "c-d1-t2-l6", "title": "Lecture 6 - Operators (part 04)", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c-day-2",
+      "day": 2,
+      "date": "2026-09-22",
+      "dayName": "Tuesday",
+      "dateLabel": "22 September",
+      "topics": [
+        {
+          "id": "c-topic-d2-control-flow",
+          "name": "Control Flow Statements",
+          "tasks": [
+            { "id": "c-d2-t1-l1", "title": "Lecture 1 - Decision Control Statements (part 01)", "type": "lecture" },
+            { "id": "c-d2-t1-l2", "title": "Lecture 2 - Decision Control Statements (part 02)", "type": "lecture" },
+            { "id": "c-d2-t1-l3", "title": "Lecture 3 - Decision Control Statements (part 03)", "type": "lecture" },
+            { "id": "c-d2-t1-l4", "title": "Lecture 4 - Decision Control Statements (part 04)", "type": "lecture" },
+            { "id": "c-d2-t1-l5", "title": "Lecture 5 - Decision Control Statements (part 05)", "type": "lecture" },
+            { "id": "c-d2-t1-l6", "title": "Lecture 6 - Decision Control Statements (part 06)", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c-day-3",
+      "day": 3,
+      "date": "2026-09-23",
+      "dayName": "Wednesday",
+      "dateLabel": "23 September",
+      "topics": [
+        {
+          "id": "c-topic-d3-functions-storage-classes",
+          "name": "Functions & Storage Classes",
+          "tasks": [
+            { "id": "c-d3-t1-l1", "title": "Lecture 1 - Functions & Storage classes (part 01)", "type": "lecture" },
+            { "id": "c-d3-t1-l2", "title": "Lecture 2 - Functions & Storage classes (part 02)", "type": "lecture" },
+            { "id": "c-d3-t1-l3", "title": "Lecture 3 - Functions & Storage classes (part 03)", "type": "lecture" },
+            { "id": "c-d3-t1-l4", "title": "Lecture 4 - Functions & Storage classes (part 04)", "type": "lecture" },
+            { "id": "c-d3-t1-l5", "title": "Lecture 5 - Functions & Storage classes (part 05)", "type": "lecture" },
+            { "id": "c-d3-t1-l6", "title": "Lecture 6 - Functions & Storage classes (part 06)", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c-day-4",
+      "day": 4,
+      "date": "2026-09-24",
+      "dayName": "Thursday",
+      "dateLabel": "24 September",
+      "topics": [
+        {
+          "id": "c-topic-d4-arrays-pointers",
+          "name": "Arrays and Pointers",
+          "tasks": [
+            { "id": "c-d4-t1-l1", "title": "Lecture 1 - Arrays and Pointers (part 01)", "type": "lecture" },
+            { "id": "c-d4-t1-l2", "title": "Lecture 2 - Arrays and Pointers (part 02)", "type": "lecture" },
+            { "id": "c-d4-t1-l3", "title": "Lecture 3 - Arrays and Pointers (part 03)", "type": "lecture" },
+            { "id": "c-d4-t1-l4", "title": "Lecture 4 - Arrays and Pointers (part 04)", "type": "lecture" },
+            { "id": "c-d4-t1-l5", "title": "Lecture 5 - Arrays and Pointers (part 05)", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c-day-5",
+      "day": 5,
+      "date": "2026-09-25",
+      "dayName": "Friday",
+      "dateLabel": "25 September",
+      "topics": [
+        {
+          "id": "c-topic-d5-string",
+          "name": "String",
+          "tasks": [
+            { "id": "c-d5-t1-l1", "title": "Lecture 1 - String (part 01)", "type": "lecture" },
+            { "id": "c-d5-t1-l2", "title": "Lecture 2 - String (part 02)", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "c-topic-d5-structure-union",
+          "name": "Structure & Union",
+          "tasks": [
+            { "id": "c-d5-t2-l1", "title": "Lecture 1 - Structure & Union (part 01)", "type": "lecture" },
+            { "id": "c-d5-t2-l2", "title": "Lecture 2 - Structure & Union (part 02)", "type": "lecture" }
+          ]
+        }
+      ]
+    }
+  ]
+}
