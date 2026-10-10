@@ -51,13 +51,13 @@ window.GateProgressService = {
 
         const today = new Date();
         const startYear = 2026;
-        const startMonth = 9; // September (1-indexed, starting September 2026)
+        const startMonth = 10; // October (1-indexed, starting October 2026)
 
         // End month calculation: at least December of startYear, or current month if later
         let endYear = Math.max(startYear, today.getFullYear());
         let endMonth = (endYear === startYear) ? 12 : (today.getMonth() + 1);
 
-        // Build array of { year, month } starting from September 2026
+        // Build array of { year, month } starting from October 2026
         const monthList = [];
         let y = startYear;
         let m = startMonth;
@@ -105,7 +105,7 @@ window.GateProgressService = {
 
             const grid = card.querySelector('.month-calendar-grid');
 
-            const startDay = (year === 2026 && month === 9) ? 5 : 1;
+            const startDay = (year === 2026 && month === 10) ? 10 : 1;
             const firstDateObj = new Date(year, month - 1, startDay);
             const firstDayOfWeek = firstDateObj.getDay();
             const offset = ((firstDayOfWeek + 6) % 7) + 1;

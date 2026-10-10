@@ -5,14 +5,14 @@
     "shortName": "COA",
     "icon": "cpu",
     "accent": "purple",
-    "totalTasks": 40
+    "totalTasks": 0
   },
   {
     "id": "os",
     "name": "Operating System",
     "icon": "terminal",
     "accent": "blue",
-    "totalTasks": 34
+    "totalTasks": 0
   },
   {
     "id": "dbms",
@@ -82,7 +82,7 @@
     "name": "C Programming",
     "icon": "file-code",
     "accent": "sky",
-    "totalTasks": 29
+    "totalTasks": 0
   },
   {
     "id": "aptitude",

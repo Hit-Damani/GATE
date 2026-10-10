@@ -16,7 +16,7 @@ Built with a **zero-framework, lightweight architecture** (HTML5, CSS3, Vanilla 
 - **Interactive Telemetry & Metrics**:
   - **Syllabus Doughnut (Chart.js)**: Circular completion gauge with smooth cubic-bezier percentage rollups.
   - **8-Metric Telemetry Matrix**: Real-time counters for Total/Completed/Remaining Subjects, Total/Completed/Remaining Tasks, Target Completion Date, and Active Days.
-  - **Month-by-Month Activity Heatmap (`activity.html`)**: Visual calendar tracking daily task density and deep work hours starting from September 2026.
+  - **Month-by-Month Activity Heatmap (`activity.html`)**: Visual calendar tracking daily task density and deep work hours starting from October 2026.
 
 - **Deep Focus Studio (`timer.html`)**:
   - **Cognitive Pomodoro Engine**: 25-minute and 50-minute structured study sprint modes.
