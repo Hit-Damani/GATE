@@ -1,0 +1,122 @@
+{
+  "subjectId": "coa",
+  "subjectName": "Computer Organization & Architecture",
+  "totalDays": 3,
+  "days": [
+    {
+      "id": "coa-day-1",
+      "day": 1,
+      "date": "2026-10-10",
+      "dayName": "Saturday",
+      "dateLabel": "10 October",
+      "topics": [
+        {
+          "id": "coa-topic-d1-basics",
+          "name": "Basic of COA",
+          "tasks": [
+            { "id": "coa-d1-t1-l1", "title": "Lecture 1 : Basics and Prerequisites", "type": "lecture" },
+            { "id": "coa-d1-t1-l2", "title": "Lecture 2 : Basics and Registers", "type": "lecture" },
+            { "id": "coa-d1-t1-l3", "title": "Lecture 3 : Registers and Memory Access", "type": "lecture" },
+            { "id": "coa-d1-t1-l4", "title": "Lecture 4 : Micro Operations (part -01)", "type": "lecture" },
+            { "id": "coa-d1-t1-l5", "title": "Lecture 5 : Micro Operations (part -02)", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "coa-topic-d1-instructions-addressing",
+          "name": "Instructions and Addressing Modes",
+          "tasks": [
+            { "id": "coa-d1-t2-l1", "title": "Lecture 1 : Instructions (part 01)", "type": "lecture" },
+            { "id": "coa-d1-t2-l2", "title": "Lecture 2 : Instructions (part 02)", "type": "lecture" },
+            { "id": "coa-d1-t2-l3", "title": "Lecture 3 : Instructions (part 03)", "type": "lecture" },
+            { "id": "coa-d1-t2-l4", "title": "Lecture 4 : Addressing Modes (part 01)", "type": "lecture" },
+            { "id": "coa-d1-t2-l5", "title": "Lecture 5 : Addressing Modes (part 02)", "type": "lecture" },
+            { "id": "coa-d1-t2-l6", "title": "Lecture 6 : Addressing Modes & CPU", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "coa-topic-d1-cpu-control-unit",
+          "name": "CPU & Control Unit",
+          "tasks": [
+            { "id": "coa-d1-t3-l1", "title": "Lecture 1 : CPU & Data Path", "type": "lecture" },
+            { "id": "coa-d1-t3-l2", "title": "Lecture 2 : Control Unit (part 01)", "type": "lecture" },
+            { "id": "coa-d1-t3-l3", "title": "Lecture 3 : Control Unit (part 02)", "type": "lecture" },
+            { "id": "coa-d1-t3-l4", "title": "Lecture 4 : Control Unit (part 03)", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "coa-topic-d1-io-organization",
+          "name": "IO Organization",
+          "tasks": [
+            { "id": "coa-d1-t4-l1", "title": "Lecture 1 : IO Organization & IO Interface", "type": "lecture" },
+            { "id": "coa-d1-t4-l2", "title": "Lecture 2 : IO Organization & Interrupt", "type": "lecture" },
+            { "id": "coa-d1-t4-l3", "title": "Lecture 3 : IO Organization & DMA", "type": "lecture" },
+            { "id": "coa-d1-t4-l4", "title": "Lecture 4 : DMA (part 02)", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "coa-topic-d1-memory-organization",
+          "name": "Memory Organization",
+          "tasks": [
+            { "id": "coa-d1-t5-l1", "title": "Lecture 1 : Introduction", "type": "lecture" },
+            { "id": "coa-d1-t5-l2", "title": "Lecture 2 : RAM,ROM & Chip Organization", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coa-day-2",
+      "day": 2,
+      "date": "2026-10-11",
+      "dayName": "Sunday",
+      "dateLabel": "11 October",
+      "topics": [
+        {
+          "id": "coa-topic-d2-cache-organization",
+          "name": "Cache Organization",
+          "tasks": [
+            { "id": "coa-d2-t1-l1", "title": "Lecture 1 : Introduction", "type": "lecture" },
+            { "id": "coa-d2-t1-l2", "title": "Lecture 2 : Average memory access time", "type": "lecture" },
+            { "id": "coa-d2-t1-l3", "title": "Lecture 3 : Cache Write", "type": "lecture" },
+            { "id": "coa-d2-t1-l4", "title": "Lecture 4 : Mapping & Direct Mapping", "type": "lecture" },
+            { "id": "coa-d2-t1-l5", "title": "Lecture 5 : Mapping & Direct Mapping (part 02)", "type": "lecture" },
+            { "id": "coa-d2-t1-l6", "title": "Lecture 6 : Set Associative & Fully Associative Mapping", "type": "lecture" },
+            { "id": "coa-d2-t1-l7", "title": "Lecture 7 : Mapping questions", "type": "lecture" },
+            { "id": "coa-d2-t1-l8", "title": "Lecture 8 : cache block Replacement", "type": "lecture" },
+            { "id": "coa-d2-t1-l9", "title": "Lecture 9 : Mapping Hardware", "type": "lecture" },
+            { "id": "coa-d2-t1-l10", "title": "Lecture 10 : Array Access", "type": "lecture" },
+            { "id": "coa-d2-t1-l11", "title": "Lecture 11 : Multilevel Cache", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coa-day-3",
+      "day": 3,
+      "date": "2026-10-12",
+      "dayName": "Monday",
+      "dateLabel": "12 October",
+      "topics": [
+        {
+          "id": "coa-topic-d3-magnetic-disk",
+          "name": "Magnetic Disk",
+          "tasks": [
+            { "id": "coa-d3-t1-l1", "title": "Lecture 1 : Introduction", "type": "lecture" },
+            { "id": "coa-d3-t1-l2", "title": "Lecture 2 : Disk Access", "type": "lecture" }
+          ]
+        },
+        {
+          "id": "coa-topic-d3-pipeline-processing",
+          "name": "Pipeline Processing",
+          "tasks": [
+            { "id": "coa-d3-t2-l1", "title": "Lecture 1 : Introduction", "type": "lecture" },
+            { "id": "coa-d3-t2-l2", "title": "Lecture 2 : Synchronous Pipeline and Instruction Pipeline", "type": "lecture" },
+            { "id": "coa-d3-t2-l3", "title": "Lecture 3 : Instruction Pipeline & Pipeline Hazard", "type": "lecture" },
+            { "id": "coa-d3-t2-l4", "title": "Lecture 4 : Pipeline Hazard and Hazard Classification", "type": "lecture" },
+            { "id": "coa-d3-t2-l5", "title": "Lecture 5 : Hazard Classification and CPI", "type": "lecture" },
+            { "id": "coa-d3-t2-l6", "title": "Lecture 6 : CPI & Classic RISC Pipeline", "type": "lecture" }
+          ]
+        }
+      ]
+    }
+  ]
+}
