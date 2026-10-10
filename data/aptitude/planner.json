@@ -1,0 +1,276 @@
+{
+  "subjectId": "aptitude",
+  "subjectName": "General Aptitude",
+  "totalDays": 15,
+  "days": [
+    {
+      "id": "aptitude-day-1",
+      "day": 1,
+      "date": "2026-10-10",
+      "dayName": "Saturday",
+      "dateLabel": "10 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d1-summation",
+          "name": "Summation",
+          "tasks": [
+            { "id": "aptitude-d1-t1-l1a", "title": "Lecture 1A : Summation - Sigma notation, Shifting Indices, & Properties of Sigma", "type": "lecture" },
+            { "id": "aptitude-d1-t1-l1b", "title": "Lecture 1B : Summation - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d1-t1-l1c", "title": "Lecture 1C : Summation - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-2",
+      "day": 2,
+      "date": "2026-10-11",
+      "dayName": "Sunday",
+      "dateLabel": "11 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d2-ap",
+          "name": "Arithmetic Progression (AP)",
+          "tasks": [
+            { "id": "aptitude-d2-t1-l2a", "title": "Lecture 2A : Sequence and Series - Arithmetic Progression", "type": "lecture" },
+            { "id": "aptitude-d2-t1-l2b", "title": "Lecture 2B : Arithmetic Progression - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d2-t1-l2c", "title": "Lecture 2C : Arithmetic Progression - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-3",
+      "day": 3,
+      "date": "2026-10-12",
+      "dayName": "Monday",
+      "dateLabel": "12 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d3-gp",
+          "name": "Geometric Progression (GP)",
+          "tasks": [
+            { "id": "aptitude-d3-t1-l3a", "title": "Lecture 3A : Sequence and Series - Geometric Progression", "type": "lecture" },
+            { "id": "aptitude-d3-t1-l3b", "title": "Lecture 3B : Geometric Progression - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d3-t1-l3c", "title": "Lecture 3C : Geometric Progression - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-4",
+      "day": 4,
+      "date": "2026-10-13",
+      "dayName": "Tuesday",
+      "dateLabel": "13 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d4-agp",
+          "name": "Arithmetic Geometric Progression (AGP)",
+          "tasks": [
+            { "id": "aptitude-d4-t1-l4a", "title": "Lecture 4A : Arithmetic Geometric Progression (AGP)", "type": "lecture" },
+            { "id": "aptitude-d4-t1-l4b", "title": "Lecture 4B : AGP - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d4-t1-l4c", "title": "Lecture 4C : AGP - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-5",
+      "day": 5,
+      "date": "2026-10-14",
+      "dayName": "Wednesday",
+      "dateLabel": "14 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d5-modular-arithmetic",
+          "name": "Modular Arithmetic",
+          "tasks": [
+            { "id": "aptitude-d5-t1-l5a", "title": "Lecture 5A : Modular Arithmetic", "type": "lecture" },
+            { "id": "aptitude-d5-t1-l5b", "title": "Lecture 5B : Modular Arithmetic - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d5-t1-l5c", "title": "Lecture 5C : Modular Arithmetic - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-6",
+      "day": 6,
+      "date": "2026-10-15",
+      "dayName": "Thursday",
+      "dateLabel": "15 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d6-logarithms",
+          "name": "Logarithms",
+          "tasks": [
+            { "id": "aptitude-d6-t1-l6a", "title": "Lecture 6A : Logarithm - Properties and More", "type": "lecture" },
+            { "id": "aptitude-d6-t1-l6b", "title": "Lecture 6B : Logarithms - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d6-t1-l6c", "title": "Lecture 6C : Logarithms - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-7",
+      "day": 7,
+      "date": "2026-10-16",
+      "dayName": "Friday",
+      "dateLabel": "16 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d7-counting-principles",
+          "name": "Basic Counting Principles",
+          "tasks": [
+            { "id": "aptitude-d7-t1-l7a", "title": "Lecture 7A : Basic Counting Principles - Sum Rule & Product Rule", "type": "lecture" },
+            { "id": "aptitude-d7-t1-l7b", "title": "Lecture 7B : Sum Rule & Product Rule - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d7-t1-l7c", "title": "Lecture 7C : Sum Rule & Product Rule - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-8",
+      "day": 8,
+      "date": "2026-10-17",
+      "dayName": "Saturday",
+      "dateLabel": "17 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d8-pie",
+          "name": "Inclusion Exclusion Principle",
+          "tasks": [
+            { "id": "aptitude-d8-t1-l8a", "title": "Lecture 8A : Subtraction Rule / Inclusion Exclusion Principle", "type": "lecture" },
+            { "id": "aptitude-d8-t1-l8b", "title": "Lecture 8B : Subtraction Rule / Inclusion Exclusion Principle - Practice Questions", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-9",
+      "day": 9,
+      "date": "2026-10-18",
+      "dayName": "Sunday",
+      "dateLabel": "18 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d9-speed-time-distance",
+          "name": "Speed, Time & Distance",
+          "tasks": [
+            { "id": "aptitude-d9-t1-l9a", "title": "Lecture 9A : Speed, Time & Distance - Average Speed", "type": "lecture" },
+            { "id": "aptitude-d9-t1-l9b", "title": "Lecture 9B : Speed Time & Distance - Practice Questions on Average Speed", "type": "lecture" },
+            { "id": "aptitude-d9-t1-l9c", "title": "Lecture 9C : Speed Time & Distance - GATE PYQs on Average Speed", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-10",
+      "day": 10,
+      "date": "2026-10-19",
+      "dayName": "Monday",
+      "dateLabel": "19 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d10-relative-speed",
+          "name": "Relative Speed",
+          "tasks": [
+            { "id": "aptitude-d10-t1-l10a", "title": "Lecture 10A : Relative Speed", "type": "lecture" },
+            { "id": "aptitude-d10-t1-l10b", "title": "Lecture 10B : Relative Speed - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d10-t1-l10c", "title": "Lecture 10C : Relative Speed - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-11",
+      "day": 11,
+      "date": "2026-10-20",
+      "dayName": "Tuesday",
+      "dateLabel": "20 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d11-trains",
+          "name": "Problems on Trains",
+          "tasks": [
+            { "id": "aptitude-d11-t1-l11a", "title": "Lecture 11A : Relative Speed - Problems on Trains", "type": "lecture" },
+            { "id": "aptitude-d11-t1-l11b", "title": "Lecture 11B : Problems on Trains - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d11-t1-l11c", "title": "Lecture 11C : Problems on Trains - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-12",
+      "day": 12,
+      "date": "2026-10-21",
+      "dayName": "Wednesday",
+      "dateLabel": "21 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d12-boats-streams",
+          "name": "Boats & Streams",
+          "tasks": [
+            { "id": "aptitude-d12-t1-l12a", "title": "Lecture 12A : Boats & Stream - Upstream, Downstream", "type": "lecture" },
+            { "id": "aptitude-d12-t1-l12b", "title": "Lecture 12B : Boats & Streams - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d12-t1-l12c", "title": "Lecture 12C : Boats & Streams - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-13",
+      "day": 13,
+      "date": "2026-10-22",
+      "dayName": "Thursday",
+      "dateLabel": "22 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d13-percentages",
+          "name": "Percentages",
+          "tasks": [
+            { "id": "aptitude-d13-t1-l13a", "title": "Lecture 13A : Percentages", "type": "lecture" },
+            { "id": "aptitude-d13-t1-l13b", "title": "Lecture 13B : Calculating Percentages - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d13-t1-l13c", "title": "Lecture 13C : Calculating Percentages - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-14",
+      "day": 14,
+      "date": "2026-10-23",
+      "dayName": "Friday",
+      "dateLabel": "23 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d14-percentage-change",
+          "name": "Percentage Change",
+          "tasks": [
+            { "id": "aptitude-d14-t1-l14a", "title": "Lecture 14A : Percentage Increase and Decrease", "type": "lecture" },
+            { "id": "aptitude-d14-t1-l14b", "title": "Lecture 14B : Percentage Change - Practice Questions", "type": "lecture" },
+            { "id": "aptitude-d14-t1-l14c", "title": "Lecture 14C : Percentage Change - GATE PYQs", "type": "lecture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aptitude-day-15",
+      "day": 15,
+      "date": "2026-10-24",
+      "dayName": "Saturday",
+      "dateLabel": "24 October",
+      "topics": [
+        {
+          "id": "aptitude-topic-d15-ratio-functions",
+          "name": "Ratio, Absolute Value & Functions",
+          "tasks": [
+            { "id": "aptitude-d15-t1-l15a", "title": "Lecture 15A : Ratio and Proportions", "type": "lecture" },
+            { "id": "aptitude-d15-t1-l16", "title": "Lecture 16 : Absolute Value", "type": "lecture" },
+            { "id": "aptitude-d15-t1-l17", "title": "Lecture 17 : Floor & Ceiling Functions", "type": "lecture" }
+          ]
+        }
+      ]
+    }
+  ]
+}
